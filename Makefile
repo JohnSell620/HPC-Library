@@ -13,7 +13,7 @@ CPPFLAGS	+= -MD -MP
 CXXFLAGS	= $(LANG) $(OPTS) #$(PICKY)
 
 HEADERS		= Grid.hpp mpiStencil.hpp Final.hpp
-FINAL 		= Final.cpp mpiStencil.cpp
+FINAL			= Final.cpp mpiStencil.cpp
 TESTS			= ir-mpi.cpp cg-mpi.cpp
 SOURCES		= Grid.cpp
 

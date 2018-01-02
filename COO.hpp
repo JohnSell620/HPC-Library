@@ -90,7 +90,7 @@ public:
     assert(arrayData.size() == rowIndices.size() && arrayData.size() == colIndices.size());
 
 		// Write header
-    outputFile << "AMATH 583 COOMATRIX" << std::endl;
+    outputFile << "COOMATRIX" << std::endl;
     outputFile << iRows << " " << jCols << std::endl;
 
     // Write data
@@ -102,7 +102,7 @@ public:
     }
 
     // Write tailer
-    outputFile << "THIS IS THE END" << std::endl;
+    outputFile << "END" << std::endl;
   }
 
 private:

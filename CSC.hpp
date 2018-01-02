@@ -120,7 +120,7 @@ public:
 		else { decomp = colIndices; }
 
 		// Write header
-    os << "AMATH 583 COOMATRIX" << std::endl;
+    os << "CSCMATRIX" << std::endl;
     os << jCols << std::endl;
 		os << iRows << std::endl;
 		os << arrayData.size() << std::endl;
@@ -133,7 +133,7 @@ public:
       os << std::endl;
     }
 		// Write trailer
-    os << "THIS IS THE END" << std::endl;
+    os << "END" << std::endl;
   }
 
 	void streamMatrix(std::string file) const {
@@ -160,7 +160,7 @@ public:
 		ofs.open (file, std::ios::out);
 
 		// Write header
-		ofs << "AMATH 583 COOMatrix" << std::endl;
+		ofs << "CSCMatrix" << std::endl;
 		ofs << jCols << std::endl;
 		ofs << iRows << std::endl;
 		ofs << arrayData.size() << std::endl;
@@ -172,7 +172,7 @@ public:
 			ofs << arrayData[i] << std::endl;
 		}
 		// Write trailer
-		ofs << "THIS IS THE END" << std::endl;
+		ofs << "END" << std::endl;
 
 		ofs.close();
 	}
@@ -193,8 +193,8 @@ void CSCMatrix::readMatrix(std::string fileName) {
 	std::string string_input;
 
 	std::getline(inputFile, string_input);
-	if (string_input.compare("AMATH 583 COOMATRIX") != 0) {
-		std::cout << "Error: incorrect header. Correct header: AMATH 583 COOMATRIX" << std::endl;
+	if (string_input.compare("CSCMATRIX") != 0) {
+		std::cout << "Error: incorrect header. Correct header: CSCMATRIX" << std::endl;
 		std::exit(-2);
 	}
 
@@ -261,8 +261,8 @@ void CSCMatrix::readMatrix(std::string fileName) {
 	assert(nonzeros == this->numNonzeros());
 
 	std::getline(inputFile, string_input);
-	if (string_input.compare("THIS IS THE END") != 0) {
-		std::cout << "Error: incorrect trailer. Correct trailer: THIS IS THE END" << std::endl;
+	if (string_input.compare("END") != 0) {
+		std::cout << "Error: incorrect trailer. Correct trailer: END" << std::endl;
 		std::exit(-2);
 	}
 

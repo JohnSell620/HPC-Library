@@ -170,7 +170,7 @@ Vector readVector(std::istream& inputStream) {
 	std::string string_input;
 
 	std::getline(inputStream, string_input);
-	if (string_input.compare("AMATH 583 VECTOR") != 0) {
+	if (string_input.compare("VECTOR") != 0) {
 		std::cout << "Error: incorrect header" << std::endl;
 		std::exit(-2);
 	}
@@ -193,7 +193,7 @@ Vector readVector(std::istream& inputStream) {
 
 	std::getline(inputStream, string_input);
 
-	if (string_input.compare("THIS IS THE END") != 0) {
+	if (string_input.compare("END") != 0) {
 		std::cout << "Error: incorrect trailer" << std::endl;
 		std::exit(-2);
 	}
@@ -217,25 +217,25 @@ Vector readVector(std::string fileName) {
 }
 
 void writeVector(const Vector& x, std::ostream& os) {
-	os << "AMATH 583 VECTOR" << std::endl;
+	os << "VECTOR" << std::endl;
 	os << x.numRows() << std::endl;
 
 	for (int i = 0; i < x.numRows(); ++i)
 		os << x(i) << std::endl;
 
-	os << "THIS IS THE END" << std::endl;
+	os << "END" << std::endl;
 }
 
 void writeVector(const Vector& x, std::string file) {
 		std::ofstream ofs;
 		ofs.open (file, std::ios::out);
 
-		ofs << "AMATH 583 VECTOR" << std::endl;
+		ofs << "VECTOR" << std::endl;
 		ofs << x.numRows() << std::endl;
 		for (int i = 0; i < x.numRows(); ++i)
 			ofs << x(i) << std::endl;
 
-		ofs << "THIS IS THE END" << std::endl;
+		ofs << "END" << std::endl;
 
 		ofs.close();
 }

@@ -54,7 +54,7 @@ public:
   void streamMatrix(std::ostream& outputFile) const {
 
 		// Write header
-    outputFile << "AMATH 583 AOSMATRIX" << std::endl;
+    outputFile << "AOSMATRIX" << std::endl;
     outputFile << iRows << " " << jCols << std::endl;
 
     // Write data
@@ -66,7 +66,7 @@ public:
     }
 
     // Write tailer
-    outputFile << "THIS IS THE END" << std::endl;
+    outputFile << "END" << std::endl;
   }
 
 
