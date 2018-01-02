@@ -1,0 +1,25 @@
+/**
+		Timer.hpp
+		Description: Timer class for benchmarking runs.
+
+		@author Johnny Sellers
+		@version 0.1 04/28/2017
+*/
+#if !defined(TIMER_HPP)
+#define TIMER_HPP
+
+#include <chrono>
+
+class Timer {
+public:
+  Timer() : startTime(), stopTime() {}
+
+  time_t start()  { return (startTime = std::chrono::system_clock::now()); }
+  time_t stop()   { return (stopTime  = std::chrono::system_clock::now()); }
+  double elapsed() { return std::chrono::duration_cast<std::chrono::milliseconds>(stopTime-startTime).count(); }
+
+private:
+	std::chrono::time_point<std::chrono::system_clock> startTime, stopTime;
+};
+
+#endif // TIMER_HPP
