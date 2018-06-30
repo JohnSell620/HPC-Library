@@ -10,7 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include "Vector.hpp"
-#include "CSCMatrix.hpp"
+#include "CSC.hpp"
 #include "AOS.hpp"
 #include "COO.hpp"
 #include "Timer.hpp"

@@ -2,3 +2,4 @@ hpcalc.cpp
 main.cpp
 *.txt
 test
+*.cpy

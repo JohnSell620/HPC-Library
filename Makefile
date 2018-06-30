@@ -1,29 +1,29 @@
 #
 # @author Johnny Sellers
 # 06/07/2017
-# Makefile for...
+# Makefile for HPC-Library.
 #
-LANG			= -std=c++11 #-Wc++11-extensions
-PICKY			= -g -Wall -Wextra -pedantic
+LANG		= -std=c++11 #-Wc++11-extensions
+PICKY		= -g -Wall -Wextra -pedantic
 
-CXX				= c++ #mpic++ -cxx=clang++
-OPTS			= -Ofast -march=native -DNDEBUG
+CXX		= c++ #mpic++ -cxx=clang++
+OPTS		= -Ofast -march=native -DNDEBUG
 CPPFLAGS	+= -MD -MP
 
 CXXFLAGS	= $(LANG) $(OPTS) #$(PICKY)
 
 HEADERS		= Grid.hpp mpiStencil.hpp Final.hpp
-FINAL			= Final.cpp mpiStencil.cpp
-TESTS			= ir-mpi.cpp cg-mpi.cpp
+FINAL		= Final.cpp mpiStencil.cpp
+TESTS		= ir-mpi.cpp cg-mpi.cpp
 SOURCES		= Grid.cpp
 
 OBJECTS		= $(SOURCES:.cpp=.o) $(TESTS:.cpp=.o) $(FINAL:.cpp=.o)
 TARGETS		= $(TESTS:.cpp=)
-PCHS			= $(HEADERS:=.gch)
+PCHS		= $(HEADERS:=.gch)
 
-all				: $(TARGETS)
+all		: $(TARGETS)
 
-%.o				: %.cpp
+%.o		: %.cpp
 		  $(CXX) -c $(CXXFLAGS) $< -o $@
 
 ir-mpi		: ir-mpi.o Grid.o mpiStencil.o Final.o
@@ -32,7 +32,7 @@ ir-mpi		: ir-mpi.o Grid.o mpiStencil.o Final.o
 cg-mpi		: cg-mpi.o Grid.o mpiStencil.o Final.o
 		  $(CXX) $(CXXFLAGS) $^ -o $@
 
-main			: main.o Matrix.o Vector.o
+main		: main.o Matrix.o Vector.o
 		  $(CXX) $(CXXFLAGS) $^ -o $@
 
 hpcalc		: hpcalc.o Matrix.o Vector.o

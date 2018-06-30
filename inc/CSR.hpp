@@ -116,58 +116,6 @@ private:
 	std::vector<double> arrayData;
 };
 
-void CSRMatrix::piscetize(size_type xpoints, size_type ypoints) {
-  assert(this->numRows() == this->numCols());
-  assert(xpoints*ypoints == this->numRows());
-
-  this->clear();
-	tuple_list elements;
-
-  for (size_type j = 0; j < xpoints; j++) {
-    for (size_type k = 0; k < ypoints; k++) {
-      size_type jrow = j*ypoints + k;
-
-      if (j != 0) {
-				size_type jcol = (j-1)*ypoints + k;
-				std::tuple<size_type, size_type, double> tuple = std::make_tuple(jrow, jcol, -1.0);
-				elements.push_back(tuple);
-      }
-      if (k != 0) {
-				size_type jcol = j*ypoints + (k-1);
-				std::tuple<size_type, size_type, double> tuple = std::make_tuple(jrow, jcol, -1.0);
-				elements.push_back(tuple);
-      }
-
-			std::tuple<size_type, size_type, double> tuple = std::make_tuple(jrow, jrow, 4);
-			elements.push_back(tuple);
-
-      if (k != ypoints-1) {
-				size_type jcol = j*ypoints + (k+1);
-				std::tuple<size_type, size_type, double> tuple = std::make_tuple(jrow, jcol, -1.0);
-				elements.push_back(tuple);
-      }
-      if (j != xpoints-1) {
-				size_type jcol = (j+1)*ypoints + k;
-				std::tuple<size_type, size_type, double> tuple = std::make_tuple(jrow, jcol, -1.0);
-				elements.push_back(tuple);
-      }
-    }
-  }
-	elements.sort();
-	this->openForPushBack();
-
-	size_type colIndice, rowIndice; double value;
-	for (tuple_list::iterator it = elements.begin(); it != elements.end(); ++it) {
-		std::tuple<size_type, size_type, double> temp = *it;
-		rowIndice = std::get<0>(temp);
-		colIndice = std::get<1>(temp);
-		value = std::get<2>(temp);
-		if (value != 0)
-			this->push_back(rowIndice, colIndice, value);
-	}
-	this->closeForPushBack();
-}
-
 // Function prototypes
 void ompMatvec(const CSRMatrix& A, const Vector& x, Vector& y);
 Vector operator*(const CSRMatrix& A, const Vector& x);
