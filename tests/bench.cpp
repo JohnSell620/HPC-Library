@@ -9,12 +9,13 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
-#include "Vector.hpp"
-#include "CSC.hpp"
-#include "AOS.hpp"
-#include "COO.hpp"
-#include "Timer.hpp"
+// #include "../inc/Vector.hpp"
+// #include "../inc/CSC.hpp"
+// #include "../inc/AOS.hpp"
+// #include "../inc/COO.hpp"
+// #include "../inc/Timer.hpp"
 #include <functional>
+#include "../inc/libhpc.h"
 
 using namespace std;
 
@@ -65,7 +66,7 @@ void runBenchmark_COO(function<void (const COOMatrix&, const Vector&, Vector&)>f
 
 		COOMatrix B(i, i);
 		int xpts = std::sqrt((double) i);
-		piscetize(B, xpts, xpts);
+		piscretize(B, xpts, xpts);
 
 		cout << i << " " << t/((double)numruns) << endl;
   }
@@ -77,7 +78,7 @@ double benchmark_COO(int M, int N, long numruns, function<void (const COOMatrix&
 
   COOMatrix A(M, M);
   Vector x(M), y(M);
-  piscetize(A, xpoints, xpoints);
+  piscretize(A, xpoints, xpoints);
   randomize(x);
   randomize(y);
 
@@ -101,7 +102,7 @@ void runBenchmark_AOS(function<void (const AOSMatrix&, const Vector&, Vector&)>f
 
 		AOSMatrix B(i, i);
 		int xpts = std::sqrt((double) i);
-		B.piscetize(xpts, xpts);
+		piscretize(B, xpts, xpts);
 
 		cout << i << " " << t/((double)numruns) << endl;
   }
@@ -113,7 +114,7 @@ double benchmark_AOS(int M, int N, long numruns, function<void (const AOSMatrix&
 
   AOSMatrix A(M, M);
   Vector x(M), y(M);
-  A.piscetize(xpoints, xpoints);
+  piscretize(A, xpoints, xpoints);
   randomize(x);
   randomize(y);
 
@@ -137,7 +138,7 @@ void runBenchmark_CSC(function<void (const CSCMatrix&, const Vector&, Vector&)>f
 
 		CSCMatrix B(i, i);
 		int xpts = std::sqrt((double) i);
-		B.piscetize(xpts, xpts);
+		B.piscretize(xpts, xpts);
 
 		cout << i << " " << t/((double)numruns) << endl;
   }
@@ -149,7 +150,7 @@ double benchmark_CSC(int M, int N, long numruns, function<void (const CSCMatrix&
 
   CSCMatrix A(M, M);
   Vector x(M), y(M);
-  A.piscetize(xpoints, xpoints);
+  A.piscretize(xpoints, xpoints);
   randomize(x);
   randomize(y);
 

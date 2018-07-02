@@ -14,8 +14,8 @@ class Timer {
 public:
   Timer() : startTime(), stopTime() {}
 
-  time_t start()  { return (startTime = std::chrono::system_clock::now()); }
-  time_t stop()   { return (stopTime  = std::chrono::system_clock::now()); }
+  std::chrono::system_clock::time_point start()  { return (startTime = std::chrono::system_clock::now()); }
+  std::chrono::system_clock::time_point stop()   { return (stopTime  = std::chrono::system_clock::now()); }
   double elapsed() { return std::chrono::duration_cast<std::chrono::milliseconds>(stopTime-startTime).count(); }
 
 private:

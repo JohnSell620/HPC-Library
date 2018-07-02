@@ -11,7 +11,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "CSC.hpp"
+#include "../inc/CSC.hpp"
 
 
 void CSCMatrix::readMatrix(std::string fileName) {
@@ -98,7 +98,7 @@ void CSCMatrix::readMatrix(std::string fileName) {
 	inputFile.close();
 }
 
-void CSCMatrix::piscetize(int xpoints, int ypoints) {
+void CSCMatrix::piscretize(int xpoints, int ypoints) {
   assert(this->numRows() == this->numCols());
   assert(xpoints*ypoints == this->numRows());
 

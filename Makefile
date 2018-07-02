@@ -3,50 +3,61 @@
 # 06/07/2017
 # Makefile for HPC-Library.
 #
-LANG		= -std=c++11 #-Wc++11-extensions
-PICKY		= -g -Wall -Wextra -pedantic
+LANG		= -std=c++11 # -Wc++11-extensions
 
-CXX		= c++ #mpic++ -cxx=clang++
+CXX		= c++
+MPI 	= mpic++ # --enable-mpi-cxx # -cxx=clang++
+
 OPTS		= -Ofast -march=native -DNDEBUG
+PICKY		= -g -Wall # -Wextra -pedantic
 CPPFLAGS	+= -MD -MP
 
-CXXFLAGS	= $(LANG) $(OPTS) #$(PICKY)
+CXXFLAGS	= $(LANG) $(OPTS)
+MPIFLAGS	= $(LANG) $(PICKY)
 
-HEADERS		= Grid.hpp mpiStencil.hpp Final.hpp
-FINAL		= Final.cpp mpiStencil.cpp
-TESTS		= ir-mpi.cpp cg-mpi.cpp
-SOURCES		= Grid.cpp
+INC_PATH	= inc
+LIB_PATH	= lib
+OBJ_PATH	= obj
+EXE_PATH	= exe
 
-OBJECTS		= $(SOURCES:.cpp=.o) $(TESTS:.cpp=.o) $(FINAL:.cpp=.o)
-TARGETS		= $(TESTS:.cpp=)
+INCLUDES	= -I ./$(INC_PATH)
+
+HEADERS		= $(wildcard inc/*.hpp)
+TESTS		= $(wildcard tests/*.cpp)
+MPI_TESTS = $(wildcard tests/mpi*.cpp)
+SOURCES		= $(wildcard src/*.cpp)
+# $(info $$var is [${MPI_TESTS}])
+
+VPATH 	:= src tests
+CLASSES		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(SOURCES)))
+BENCH 	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(TESTS) $(MPI_TESTS)))
+BENCH		= $(TESTS:.cpp=)
 PCHS		= $(HEADERS:=.gch)
+EXES		= $(OBJECTS:.o=)
 
-all		: $(TARGETS)
+all		: $(EXES)
 
-%.o		: %.cpp
-		  $(CXX) -c $(CXXFLAGS) $< -o $@
+classes 	: $(CLASSES)
 
-ir-mpi		: ir-mpi.o Grid.o mpiStencil.o Final.o
-		  $(CXX) $(CXXFLAGS) $^ -o $@
+bench	: $(OBJ_PATH)/AOS.o $(OBJ_PATH)/COO.o $(OBJ_PATH)/CSC.o
+			$(CXX) $(CXXFLAGS) $^ -o $(EXE_PATH)/$@
 
-cg-mpi		: cg-mpi.o Grid.o mpiStencil.o Final.o
-		  $(CXX) $(CXXFLAGS) $^ -o $@
+csrbench	: $(OBJ_PATH)/CSR.o
+			$(CXX) $(CXXFLAGS) $^ -o $(EXE_PATH)/$@
 
-main		: main.o Matrix.o Vector.o
-		  $(CXX) $(CXXFLAGS) $^ -o $@
+densebench	: $(OBJ_PATH)/Matrix.o
+			$(CXX) $(CXXFLAGS) $^ -o $(EXE_PATH)/$@
 
-hpcalc		: hpcalc.o Matrix.o Vector.o
-		  $(CXX) $(CXXFLAGS) $^ -o $@
+sparsebench	: $(OBJ_PATH)/COO.o
+			$(CXX) $(CXXFLAGS) $^ -o $(EXE_PATH)/$@
+
+$(OBJ_PATH)/%.o : $(SOURCES) $(INC_PATH)/libhpc.h
+		  $(CXX) -c $(CXXFLAGS) $< $(INCLUDES) -o $@
+
+$(OBJ_PATH)/%.o 	: $(MPI_TESTS) $(INC_PATH)/libhpc.h
+		  $(MPI) -c $(MPIFLAGS) $< $(INCLUDES) -o $@
+
+.PHONY:	clean
 
 clean:
-	/bin/rm -f ir-mpi ir-mpi.o cg-mpi cg-mpi.o Final.o mpiStencil.o Grid.o Matrix.o Vector.o main.o hpcalc.o main *.txt
-
-# Grid.o: Grid.hpp
-# mpiStencil.o: mpiStencil.hpp
-# Final.o: Final.hpp
-# ir-mpi.o: Grid.hpp mpiStencil.hpp Final.hpp
-# cg-mpi.o: Grid.hpp mpiStencil.hpp Final.hpp
-Matrix.o: Matrix.hpp Vector.hpp
-Vector.o: Vector.hpp
-main.o: main.cpp
-hpcalc: hpcalc.cpp
+	/bin/rm -f obj/* exe/*

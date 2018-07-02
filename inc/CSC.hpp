@@ -25,9 +25,11 @@ public:
 	CSCMatrix(int M, int N) : iRows(M), jCols(N) {}
 	CSCMatrix() : iRows(0), jCols(0) {}
 
+  ~CSCMatrix() {}
+
 	void readMatrix(std::string fileName);
 
-	void piscetize(int xpoints, int ypoints);
+	void piscretize(int xpoints, int ypoints);
 
 	void openForPushBack() { is_open = true; }
 

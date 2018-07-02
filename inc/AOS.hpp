@@ -23,6 +23,9 @@ private:
 
 public:
   AOSMatrix(size_type M, size_type N) : iRows(M), jCols(N) {}
+	AOSMatrix() : iRows(0), jCols(0) {}
+
+  ~AOSMatrix() {}
 
   void push_back(size_type i, size_type j, double val) {
     assert(i < iRows && i >= 0);
@@ -78,7 +81,7 @@ private:
 // Function prototypes
 Vector operator*(const AOSMatrix& A, const Vector& x);
 void matvec(const AOSMatrix& A, const Vector& x, Vector& y);
-void piscetize(AOSMatrix& A, size_t xpoints, size_t ypoints);
+void piscretize(AOSMatrix& A, size_t xpoints, size_t ypoints);
 void writeMatrix(const AOSMatrix& A, const std::string& filename);
 void streamMatrix(const AOSMatrix&A);
 void streamMatrix(const AOSMatrix&A, std::ostream& outputFile);

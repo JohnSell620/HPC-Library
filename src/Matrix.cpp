@@ -12,7 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
-#include "Matrix.hpp"
+#include "../inc/Matrix.hpp"
 
 
 Matrix operator*(const Matrix& A, const Matrix& B) {

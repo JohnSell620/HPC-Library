@@ -18,6 +18,8 @@ public:
   Matrix(int M, int N) : iRows(M), jCols(N), arrayData(iRows*jCols) {}
   Matrix() { iRows = 0; jCols = 0; }
 
+  ~Matrix() {}
+
   double &operator()(int i, int j) { return arrayData[i*jCols + j]; }
 
   const double &operator()(int i, int j) const {
@@ -45,7 +47,7 @@ public:
 	}
 
   // void operator=(const Matrix& A);
-  
+
 private:
   int iRows, jCols;
   std::vector<double> arrayData;

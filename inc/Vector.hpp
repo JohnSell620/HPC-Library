@@ -9,6 +9,7 @@
 #define VECTOR_HPP
 
 #include <vector>
+#include <string>
 
 typedef unsigned long size_t;
 
@@ -22,6 +23,8 @@ class Vector {
 public:
   explicit Vector(size_type M) : iRows(M), arrayData(iRows      ) {}
   explicit Vector(size_type M, double init) : iRows(M), arrayData(iRows, init) {}
+
+  ~Vector() {}
 
   double &operator()(size_type i) { return arrayData[i]; }
   const double &operator()(size_type i) const { return arrayData[i]; }

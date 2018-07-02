@@ -10,7 +10,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "CSR.hpp"
+#include "../inc/CSR.hpp"
 
 #ifdef _OPENMP
 
@@ -47,7 +47,7 @@ void streamMatrix(const CSRMatrix&A, std::ostream& outputFile) {
   A.streamMatrix(outputFile);
 }
 
-void CSRMatrix::piscetize(size_type xpoints, size_type ypoints) {
+void CSRMatrix::piscretize(size_type xpoints, size_type ypoints) {
   assert(this->numRows() == this->numCols());
   assert(xpoints*ypoints == this->numRows());
 

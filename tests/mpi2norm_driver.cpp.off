@@ -1,6 +1,6 @@
 /**
-		mpi2norm_timer.cpp, AMATH 583
-		Description: mpi2norm_timer.cpp for PS8
+		mpi2norm_driver.cpp, AMATH 583
+		Description: mpi2norm_driver.cpp for PS8
 
 		@author Johnny Sellers
 		@version 0.1 05/30/2017
@@ -9,7 +9,8 @@
 #include <string>
 #include <cmath>
 #include <mpi.h>
-#include "Vector.hpp"
+// #include "Vector.hpp"
+#include "../inc/libhpc.h"
 
 double mpiTwoNorm(const Vector& v);
 
@@ -26,17 +27,12 @@ int main(int argc, char* argv[]) {
 
 	size_t vectorSize = std::stol(argv[1]);
 	Vector x(vectorSize);
-	double global, mpi, seq_time;
+	double global, mpi;
 
 	if (0 == myrank) {
 		Vector v(vectorSize*mysize);
 		randomize(v);
-
-		double seq_start, seq_finish;
-		seq_start = MPI_Wtime();
 		global = twoNorm(v);
-		seq_finish = MPI_Wtime();
-		seq_time = seq_finish - seq_start;
 
 		MPI::COMM_WORLD.Scatter(&v(myrank*vectorSize), vectorSize, MPI::DOUBLE, &x(0), vectorSize, MPI::DOUBLE, 0);
 	}
@@ -44,18 +40,11 @@ int main(int argc, char* argv[]) {
 		MPI::COMM_WORLD.Scatter(NULL, vectorSize, MPI::DOUBLE, &x(0), vectorSize, MPI::DOUBLE, 0);
 	}
 
-	double local_start, local_finish, local_elapsed, para_time;
-	MPI::COMM_WORLD.Barrier();
-	local_start = MPI_Wtime();
 	mpi = mpiTwoNorm(x);
-	local_finish = MPI_Wtime();
-	local_elapsed = local_finish - local_start;
-
-	MPI::COMM_WORLD.Reduce(&local_elapsed, &para_time, 1, MPI::DOUBLE, MPI::MAX, 0);
 
 	if (0 == myrank) {
-		std::cout << "#\tgvSize\tseq_time\tpara_time\tspeedup\tdiff" << std::endl;
-		std::cout << mysize << "\t" << vectorSize*mysize << "\t" << seq_time << "\t" << para_time << "\t" << seq_time/para_time << "\t" << std::abs(global-mpi) << std::endl;
+		std::cout << "#\tglobal\tmpi\tdiff" << std::endl;
+		std::cout << mysize << "\t" << global << "\t" << mpi << "\t" << std::abs(global-mpi) << std::endl;
 	}
 
   MPI::Finalize();

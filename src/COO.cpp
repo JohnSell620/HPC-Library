@@ -5,7 +5,7 @@
 		@author Johnny Sellers
 		@version 0.1 05/30/2017
 */
-#include "COO.hpp"
+#include "../inc/COO.hpp"
 
 #ifdef _OPENMP
 
@@ -28,7 +28,7 @@ void matvec(const COOMatrix& A, const Vector& x, Vector& y) {
   A.matvec(x, y);
 }
 
-void piscetize(COOMatrix& A, int xpoints, int ypoints) {
+void piscretize(COOMatrix& A, int xpoints, int ypoints) {
   assert(A.numRows() == A.numCols());
   assert(xpoints*ypoints == A.numRows());
 

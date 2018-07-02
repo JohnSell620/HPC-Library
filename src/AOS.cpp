@@ -5,8 +5,8 @@
 		@author Johnny Sellers
 		@version 0.1 05/30/2017
 */
-#include "AOS.hpp"
-#include "Vector.hpp"
+#include "../inc/AOS.hpp"
+// #include "../inc/Vector.hpp"
 
 Vector operator*(const AOSMatrix& A, const Vector& x) {
   assert(A.numCols() == x.numRows());
@@ -19,7 +19,7 @@ Vector operator*(const AOSMatrix& A, const Vector& x) {
 
 void matvec(const AOSMatrix& A, const Vector& x, Vector& y) { A.matvec(x, y); }
 
-void piscetize(AOSMatrix& A, size_t xpoints, size_t ypoints) {
+void piscretize(AOSMatrix& A, size_t xpoints, size_t ypoints) {
   assert(A.numRows() == A.numCols());
   assert(xpoints * ypoints == A.numRows());
 

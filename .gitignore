@@ -1,5 +1,3 @@
-hpcalc.cpp
-main.cpp
-*.txt
-test
-*.cpy
+dev
+obj
+exe

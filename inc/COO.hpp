@@ -30,6 +30,9 @@ private:
 
 public:
   COOMatrix(size_type M, size_type N) : iRows(M), jCols(N) {}
+  COOMatrix() : iRows(0), jCols(0) {}
+
+  ~COOMatrix() {}
 
   void push_back(size_type i, size_type j, double val) {
     assert(i < iRows && i >= 0);
@@ -115,7 +118,7 @@ private:
 void ompMatvec(const COOMatrix& A, const Vector& x, Vector& y);
 Vector operator*(const COOMatrix& A, const Vector& x);
 void matvec(const COOMatrix& A, const Vector& x, Vector& y);
-void piscetize(COOMatrix& A, int xpoints, int ypoints);
+void piscretize(COOMatrix& A, int xpoints, int ypoints);
 void writeMatrix(const COOMatrix& A, const std::string& filename);
 void streamMatrix(const COOMatrix&A);
 void streamMatrix(const COOMatrix&A, std::ostream& outputFile);

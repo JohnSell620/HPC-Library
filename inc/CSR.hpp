@@ -32,12 +32,11 @@ std::string getenv(const std::string& in);
 class CSRMatrix {
 public:
 	CSRMatrix(size_type M, size_type N) : is_open(false), iRows(M), jCols(N) {}
-
 	CSRMatrix() : iRows(0), jCols(0) {}
 
-  ~CSRMatrix();
+  ~CSRMatrix() {}
 
-	void piscetize(size_type xpoints, size_type ypoints);
+	void piscretize(size_type xpoints, size_type ypoints);
 
 	void openForPushBack() { is_open = true; }
 
@@ -107,6 +106,84 @@ public:
 				y(i) += arrayData[j] * x(colIndices[j]);
 			}
 		}
+	}
+
+	void streamMatrix(std::ostream& os) const {
+    assert(arrayData.size() == rowIndices.size());
+
+		// Decompress colIndices
+		std::vector<size_type> decomp(arrayData.size());
+
+		if (!is_open) {
+			int i = 0, j = 0, k = 0;
+			while (i < colIndices.size()) {
+				while (k < colIndices[i+1] - colIndices[i]) {
+					decomp[j] = i;
+					++j;
+					++k;
+				}
+				++i;
+				k = 0;
+			}
+		}
+		else { decomp = colIndices; }
+
+		// Write header
+    os << "CSRMATRIX" << std::endl;
+    os << jCols << std::endl;
+		os << iRows << std::endl;
+		os << arrayData.size() << std::endl;
+
+		// Write data
+    for (int i = 0; i < arrayData.size(); ++i) {
+      os << rowIndices[i] << " ";
+      os << decomp[i] << " ";
+      os << arrayData[i] << " ";
+      os << std::endl;
+    }
+		// Write trailer
+    os << "END" << std::endl;
+  }
+
+	void streamMatrix(std::string file) const {
+		assert(arrayData.size() == rowIndices.size());
+
+		// Decompress colIndices
+		std::vector<size_type> decomp(arrayData.size());
+
+		if (!is_open) {
+			int i = 0, j = 0, k = 0;
+			while (i < colIndices.size()) {
+				while (k < colIndices[i+1] - colIndices[i]) {
+					decomp[j] = i;
+					++j;
+					++k;
+				}
+				++i;
+				k = 0;
+			}
+		}
+		else { decomp = colIndices; }
+
+		std::ofstream ofs;
+		ofs.open (file, std::ios::out);
+
+		// Write header
+		ofs << "CSRMatrix" << std::endl;
+		ofs << jCols << std::endl;
+		ofs << iRows << std::endl;
+		ofs << arrayData.size() << std::endl;
+
+		// Write data
+		for (int i = 0; i < arrayData.size(); ++i) {
+			ofs << rowIndices[i] << " ";
+			ofs << decomp[i] << " ";
+			ofs << arrayData[i] << std::endl;
+		}
+		// Write trailer
+		ofs << "END" << std::endl;
+
+		ofs.close();
 	}
 
 private:

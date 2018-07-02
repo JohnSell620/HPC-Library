@@ -11,10 +11,11 @@
 #include <fstream>
 #include <typeinfo>
 #include <string.h>
-#include "Vector.hpp"
-#include "CSRMatrix.hpp"
-#include "Timer.hpp"
+// #include "Vector.hpp"
+// #include "CSRMatrix.hpp"
+// #include "Timer.hpp"
 #include <functional>
+#include "../inc/libhpc.h"
 
 using namespace std;
 
@@ -43,7 +44,7 @@ void runBenchmark(function<void (const CSRMatrix&, const Vector&, Vector&)>f, lo
 
 		CSRMatrix B(i, i);
 		size_type xpts = std::sqrt((double) i);
-		B.piscetize(xpts, xpts);
+		B.piscretize(xpts, xpts);
 		size_type n = B.numNonzeros();
 		double flops = 2*1.e3*numruns*n;
 
@@ -57,7 +58,7 @@ double benchmark(size_type M, size_type N, long numruns, function<void (const CS
 
   CSRMatrix A(M, M);
   Vector x(M), y(M);
-  A.piscetize(xpoints, xpoints);
+  A.piscretize(xpoints, xpoints);
   randomize(x);
   randomize(y);
 

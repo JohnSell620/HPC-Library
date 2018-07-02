@@ -9,16 +9,17 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
-#include "Vector.hpp"
-#include "COO.hpp"
-#include "Timer.hpp"
+// #include "Vector.hpp"
+// #include "COO.hpp"
+// #include "Timer.hpp"
 #include <functional>
+#include "../inc/libhpc.h"
 
-using std::cout; using std::endl;
+using std::cout; using std::endl; using std::string;
 
 
-double benchmark_sparse(int M, int N, long numruns, function<void(const COOMatrix&, const Vector&, Vector&)>);
-void runBenchmark_sparse(function<void (const COOMatrix&, const Vector&, Vector&)>f, long maxsize);
+double benchmark_sparse(int M, int N, long numruns, std::function<void(const COOMatrix&, const Vector&, Vector&)>);
+void runBenchmark_sparse(std::function<void (const COOMatrix&, const Vector&, Vector&)>f, long maxsize);
 
 void matvec_sparse(const COOMatrix& A, const Vector& x, Vector& y) {
   A.matvec(x, y);
@@ -35,7 +36,7 @@ int main(int argc, char *argv[]) {
 }
 
 
-void runBenchmark_sparse(function<void (const COOMatrix&, const Vector&, Vector&)>f, long maxsize) {
+void runBenchmark_sparse(std::function<void (const COOMatrix&, const Vector&, Vector&)>f, long maxsize) {
   cout << "N\tN*N\tTime\tFlops\tTperX"  << endl;
   for (long i = 16; i <= maxsize; i *= 4) {
     long numruns = 4L*1048L*1048L*1048L/(i*i) + 2;
@@ -43,7 +44,7 @@ void runBenchmark_sparse(function<void (const COOMatrix&, const Vector&, Vector&
 
 		COOMatrix B(i, i);
 		int xpts = std::sqrt((double) i);
-		piscetize(B, xpts, xpts);
+		piscretize(B, xpts, xpts);
 		int n = B.numNonzeros();
     //
     // Fill in the next line with the correct formula
@@ -55,13 +56,13 @@ void runBenchmark_sparse(function<void (const COOMatrix&, const Vector&, Vector&
 }
 
 // int K not used
-double benchmark_sparse(int M, int N, long numruns, function<void (const COOMatrix&, const Vector&, Vector&)>f) {
+double benchmark_sparse(int M, int N, long numruns, std::function<void (const COOMatrix&, const Vector&, Vector&)>f) {
   int xpoints = std::sqrt((double) M);
   assert(xpoints*xpoints == M);
 
   COOMatrix A(M, M);
   Vector x(M), y(M);
-  piscetize(A, xpoints, xpoints);
+  piscretize(A, xpoints, xpoints);
   randomize(x);
   randomize(y);
 

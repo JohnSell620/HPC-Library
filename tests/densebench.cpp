@@ -7,8 +7,9 @@
 */
 #include <iostream>
 #include <functional>
-#include "Matrix.hpp"
-#include "Timer.hpp"
+// #include "Matrix.hpp"
+// #include "Timer.hpp"
+#include "../inc/libhpc.h"
 
 double runBench(std::function<void (const Matrix&, const Matrix&, Matrix&)> f);
 double bench(int M, int N, int K, long numruns, std::function<void(const Matrix&, const Matrix&, Matrix&)> f);
