@@ -5,10 +5,7 @@
 		@author Johnny Sellers
 		@version 0.1 07/03/2018
 */
-#include <iostream>
-#include <string>
-#include <fstream>
-#include "Matrix.hpp"
+#include "libhpc.h"
 
 int main(int argc, char *argv[]) {
 
@@ -20,6 +17,14 @@ int main(int argc, char *argv[]) {
   qr(A,R);
   writeMatrix(R, std::cout);
 
+  CSCMatrix B(16,16);
+  Vector x(16), y(16);
+  B.piscretize(4,4);
+  randomize(x);
+  randomize(y);
+
+  B.matvec(x, y);
+  B.streamMatrix(std::cout);
 
   return 0;
 }
