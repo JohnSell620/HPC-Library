@@ -50,19 +50,19 @@ classes 	: $(CLASSES)
 precomp_headers : $(PCHS)
 
 $(EXECS)	:
-		$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
+		  $(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
 
 $(MPI_EXECS)	:
-		$(MPI) $(MPIFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
+		  $(MPI) $(MPIFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
 
 $(OBJ_PATH)/%.o : %.cpp
-		$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+		  $(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
 
 $(OBJ_PATH)/%.o : $(MPI_PATH)/%.cpp
-		$(MPI) -c $(MPIFLAGS) $(INCLUDES) $< -o $@
+		  $(MPI) -c $(MPIFLAGS) $(INCLUDES) $< -o $@
 
 %.hpp.gch	: %.hpp
-		$(CXX) $(LANG) -x c++-header $< -o $(GCH_PATH)/$@
+		  $(CXX) $(LANG) -x c++-header $< -o $(GCH_PATH)/$@
 
 .PHONY:	clean
 
