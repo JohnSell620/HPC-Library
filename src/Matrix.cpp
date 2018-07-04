@@ -12,7 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
-#include "../inc/Matrix.hpp"
+#include "Matrix.hpp"
 
 
 Matrix operator*(const Matrix& A, const Matrix& B) {
@@ -521,4 +521,19 @@ void writeMatrix(const Matrix& A, std::string file) {
       ofs << A(i, j) << std::endl;
 
   ofs << "END" << std::endl;
+}
+
+void writeMatrix(const Matrix& A, std::ostream& os) {
+	os << "MATRIX" << std::endl;
+	os << A.numRows() << std::endl;
+  os << A.numCols() << std::endl;
+
+  int numrows = A.numRows();
+  int numcols = A.numCols();
+  numrows = 5; numcols = 5;
+	for (int i = 0; i < numrows; ++i)
+    for (int j = 0; j < numcols; ++j)
+		  os << A(i, j) << std::endl;
+
+	os << "END" << std::endl;
 }

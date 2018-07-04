@@ -9,11 +9,10 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
-// #include "Vector.hpp"
-// #include "COO.hpp"
-// #include "Timer.hpp"
 #include <functional>
-#include "../inc/libhpc.h"
+#include "Vector.hpp"
+#include "COO.hpp"
+#include "Timer.hpp"
 
 using std::cout; using std::endl; using std::string;
 
@@ -26,7 +25,11 @@ void matvec_sparse(const COOMatrix& A, const Vector& x, Vector& y) {
 }
 
 int main(int argc, char *argv[]) {
-  if (argc != 2) return -1;
+  if (argc != 2) {
+		cout << "Usage: " << argv[0] << " matrix_type" << endl;
+    runBenchmark_sparse(matvec_sparse, 32L*8192L);
+		// return -1;
+	}
 
   if (string(argv[1]) == "sparse")
     runBenchmark_sparse(matvec_sparse, 32L*8192L);

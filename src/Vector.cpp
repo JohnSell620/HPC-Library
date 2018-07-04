@@ -17,7 +17,7 @@
 #include <vector>
 #include <mutex>
 #include <future>
-#include "../inc/Vector.hpp"
+#include "Vector.hpp"
 
 static std::mutex partial_mutex;
 

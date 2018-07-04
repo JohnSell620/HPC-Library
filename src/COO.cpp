@@ -5,7 +5,7 @@
 		@author Johnny Sellers
 		@version 0.1 05/30/2017
 */
-#include "../inc/COO.hpp"
+#include "COO.hpp"
 
 #ifdef _OPENMP
 

@@ -5,8 +5,7 @@
 		@author Johnny Sellers
 		@version 0.1 05/30/2017
 */
-#include "../inc/AOS.hpp"
-// #include "../inc/Vector.hpp"
+#include "AOS.hpp"
 
 Vector operator*(const AOSMatrix& A, const Vector& x) {
   assert(A.numCols() == x.numRows());

@@ -79,5 +79,6 @@ Matrix outProd(const Vector&x, const Vector& y);
 Matrix qr(const Matrix& A, Matrix& R);
 Matrix readMatrix(std::string fileName);
 void writeMatrix(const Matrix& A, std::string file);
+void writeMatrix(const Matrix& A, std::ostream& os);
 
 #endif // MATRIX_HPP

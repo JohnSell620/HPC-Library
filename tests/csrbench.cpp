@@ -11,11 +11,10 @@
 #include <fstream>
 #include <typeinfo>
 #include <string.h>
-// #include "Vector.hpp"
-// #include "CSRMatrix.hpp"
-// #include "Timer.hpp"
 #include <functional>
-#include "../inc/libhpc.h"
+#include "Vector.hpp"
+#include "CSR.hpp"
+#include "Timer.hpp"
 
 using namespace std;
 

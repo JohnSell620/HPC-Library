@@ -9,8 +9,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-
-#include "../inc/CSR.hpp"
+#include "CSR.hpp"
 
 #ifdef _OPENMP
 

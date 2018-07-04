@@ -10,8 +10,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-
-#include "../inc/CSC.hpp"
+#include "CSC.hpp"
 
 
 void CSCMatrix::readMatrix(std::string fileName) {
