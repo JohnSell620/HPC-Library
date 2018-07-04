@@ -24,19 +24,20 @@ GCH_PATH	= gch
 
 INCLUDES	= -I ./$(INC_PATH)
 
-VPATH 	:= src tests obj inc
+VPATH 		:= src tests obj inc
 HEADERS		= $(wildcard inc/*.hpp)
 TESTS		= $(shell find tests/ ! -name "mpi*.cpp" -name "*.cpp")
 MPI_TESTS 	= $(wildcard tests/mpi/*.cpp)
 SOURCES		= $(wildcard src/*.cpp)
+
 # $(info $$TESTS is [${TESTS}])
 
 CLASSES		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(SOURCES)))
 BENCH 		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(TESTS)))
 MPI_BENCH 		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(MPI_TESTS)))
 
-OBJECTS	= $(CLASSES) $(BENCH) $(MPI_BENCH)
-TARGETS	= $(notdir $(BENCH))
+OBJECTS		= $(CLASSES) $(BENCH) $(MPI_BENCH)
+TARGETS		= $(notdir $(BENCH))
 MPI_TARGETS	= $(notdir $(MPI_BENCH))
 PCHS		= $(notdir $(HEADERS:=.gch))
 EXECS		= $(TARGETS:.o=)
@@ -46,22 +47,22 @@ all		: $(OBJECTS) $(EXECS) $(MPI_EXECS)
 
 classes 	: $(CLASSES)
 
-precomp_headers 		: $(PCHS)
+precomp_headers : $(PCHS)
 
 $(EXECS)	:
-			$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
 
 $(MPI_EXECS)	:
-			$(MPI) $(MPIFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
+	$(MPI) $(MPIFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
 
 $(OBJ_PATH)/%.o : %.cpp
-			$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
 
 $(OBJ_PATH)/%.o : $(MPI_PATH)/%.cpp
-			$(MPI) -c $(MPIFLAGS) $(INCLUDES) $< -o $@
+	$(MPI) -c $(MPIFLAGS) $(INCLUDES) $< -o $@
 
 %.hpp.gch	: %.hpp
-			$(CXX) $(LANG) -x c++-header $< -o $(GCH_PATH)/$@
+	$(CXX) $(LANG) -x c++-header $< -o $(GCH_PATH)/$@
 
 .PHONY:	clean
 

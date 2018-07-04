@@ -30,9 +30,9 @@ $ ar rcs lib/libHPCLibrary.a obj/*.o
 ```
 The following command links the static library to `main.cpp`.
 ```
-$ c++ -std=c++11 -I ./inc -L ./lib -static ./tests/main.cpp -lHPCLibrary -o ./exe/libHPCLibraryClient_static
+$ c++ -std=c++11 -I ./inc -L ./lib -static ./tests/main.cpp -lHPCLibrary -o ./exe/libHPCLibraryClient
 ```
-Now run `./exe/libHPCLibraryClient_static` to see the output of `main.cpp`. To build the benchmarking tests, just run `$ make`.
+Now run `$ ./exe/libHPCLibraryClient` to see the output of `main.cpp`. To build the benchmarking tests, just run `$ make`.
 
 Run `$ make precomp_headers` to pre-compile the .hpp files, and include these to optimize programs.
 
