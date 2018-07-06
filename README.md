@@ -6,7 +6,7 @@ This library consists mainly of various matrix classes with computational method
 Some benchmarking programs depend on OpenMPI, but it's not required for most programs. Skip steps 1 through 3 if using these are not desired.
 1. Download OpenMPI (recommend extracting contents in /usr/local).
 2. Run the following commands.
-```
+```bash
 $ tar -xzvf openmpi-x.x.x.tar/gz
 $ cd openmpi-x.x.x
 $ sudo ./configure --prefix-$HOME/openmpi --enable-mpi-cxx
@@ -15,13 +15,13 @@ $ sudo make install
 ```
 3. In ~/.bashrc file, add the following lines.
 ```
-$ export PATH=/path/to/openmpi/bin${PATH:+:${PATH}}
-$ export LD_LIBRARY_PATH=/path/to/openmpi/lib\${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export PATH=/path/to/openmpi/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/path/to/openmpi/lib\${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 ```
 
 ### Building and using the library
 Run the following commands to build the HPCLibrary library.
-```
+```bash
 $ clone https://github.com/JohnSell620/HPC-Library.git
 $ cd HPC-Library
 $ mkdir obj exe lib
@@ -29,7 +29,7 @@ $ make classes
 $ ar rcs lib/libHPCLibrary.a obj/*.o
 ```
 The following command links the static library to `main.cpp`.
-```
+```bash
 $ c++ -std=c++11 -I ./inc -L ./lib -static ./tests/main.cpp -lHPCLibrary -o ./exe/libHPCLibraryClient
 ```
 Now run `$ ./exe/libHPCLibraryClient` to see the output of `main.cpp`. To build the benchmarking tests, just run `$ make`.
@@ -38,7 +38,7 @@ Run `$ make precomp_headers` to pre-compile the .hpp files, and include these to
 
 ## Usage
 Try these commands from the HPC-Library directory after running `make all`.
-```
+```bash
 $ ./exe/bench
 $ ./exe/csrbench
 $ ./exe/sparsebench
