@@ -1,5 +1,5 @@
 /**
-		bench.cpp, AMATH 583
+		bench.cpp
 		Description: Benchmarking program to compare CSC and AOS implementations with COO implementation
 
 		@author Johnny Sellers

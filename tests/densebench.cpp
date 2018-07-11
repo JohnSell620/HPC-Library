@@ -1,5 +1,5 @@
 /**
-		densebench.cpp, AMATH 583
+		densebench.cpp
 		Description: Benchmarking of dense matrix-matrix multiplication.
 
 		@author Johnny Sellers
@@ -8,7 +8,6 @@
 #include <iostream>
 #include <functional>
 #include "Matrix.hpp"
-#include "Vector.hpp"
 #include "Timer.hpp"
 
 double runBench(std::function<void (const Matrix&, const Matrix&, Matrix&)> f);
@@ -40,7 +39,7 @@ int main() {
 
 double runBench(std::function<void (const Matrix&, const Matrix&, Matrix&)> f) {
 	double a = 0.0;
-  for (long i = 8; i <= 4096; i *= 2) {
+  for (long i = 8; i <= 4096/4; i *= 2) {
 		long numruns = 8L*1048L/(i*i*i) + 2;
     double t = bench(i, i, i, numruns, f);
     double flops_per_multiply = i*i*i;

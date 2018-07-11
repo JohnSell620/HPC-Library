@@ -1,5 +1,5 @@
 /**
-		COO.hpp
+		sparsebench.cpp
 		Description: Estimates and prints floating point performance of the sparse matrix-vector product of the COO Matrix class.
 
 		@author Johnny Sellers

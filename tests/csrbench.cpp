@@ -1,5 +1,5 @@
 /**
-		bench.cpp, AMATH 583
+		csrbench.cpp
 		Description: csrbench.cpp for PS5 -- to compare CSR performance with Roofline model
 
 		@author Johnny Sellers

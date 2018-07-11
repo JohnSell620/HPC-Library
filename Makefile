@@ -69,7 +69,7 @@ $(OBJ_PATH)/%.o : $(MPI_PATH)/%.cpp
 clean:
 	/bin/rm -f obj/* exe/* gch/*
 
-main			: main.o Matrix.o Vector.o
+main			: main.o CSC.o Matrix.o Vector.o
 bench			: bench.o AOS.o COO.o CSC.o Vector.o
 csrbench		: csrbench.o CSR.o Vector.o
 densebench		: densebench.o Matrix.o Vector.o
