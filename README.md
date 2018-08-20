@@ -3,7 +3,7 @@ This library consists mainly of various matrix classes with computational method
 
 ## Building
 ### Install OpenMPI
-Some benchmarking programs depend on OpenMPI, but it's not required for most programs. Skip steps 1 through 3 if using these are not desired.
+Some benchmarking programs depend on OpenMPI, but it's not required for most programs. Skip steps 1 through 3 if using these is not desired.
 1. Download OpenMPI (recommend extracting contents in /usr/local).
 2. Run the following commands.
 ```bash
@@ -51,3 +51,7 @@ Coordinate sparse matrix storage (array of structs) versus struct of arrays doin
 Compressed sparse column versus coordinate sparse (array of structs) storage doing matrix-vect
 or multiplication.
 <img src="./graphs/CSCvsCOOcomparison.png" alt="CSCvsCOO" width="600px" />
+
+
+## TODO
+1. Fix gpu_densebench.cu
