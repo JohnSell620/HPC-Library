@@ -9,8 +9,8 @@
 #include <functional>
 #include <algorithm>
 #include <random>
-#include "../../inc/Matrix.hpp"
-#include "../../inc/Timer.hpp"
+#include "Matrix.hpp"
+#include "Timer.hpp"
 
 #define BLOCK_SIZE 16
 
@@ -63,9 +63,9 @@ double runBench(int M, int N, int K) {
   dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
   dim3 dimGrid(h_B.numCols() / dimBlock.x, h_A.numRows() / dimBlock.y);
 
-	double a = 0.0;
+  double a = 0.0;
   for (long i = 8; i <= 4096/4; i *= 2) {
-	  long numruns = 8L*1048L*1048L*16L/(i*i*i) + 2;
+    long numruns = 8L*1048L*1048L*16L/(i*i*i) + 2;
 
     Timer T;
     T.start();
@@ -75,8 +75,8 @@ double runBench(int M, int N, int K) {
 
     double t = T.elapsed();
     double flops_per_multiply = i*i*i;
-		if (a < 2.0*1.e3*numruns*flops_per_multiply/t)
-			a = 2.0*1.e3*numruns*flops_per_multiply/t;
+    if (a < 2.0*1.e3*numruns*flops_per_multiply/t)
+    	a = 2.0*1.e3*numruns*flops_per_multiply/t;
   }
 
   // Copy results back to host GPUMatrix
@@ -98,6 +98,6 @@ double runBench(int M, int N, int K) {
 int main() {
   int dimA = 256, dimB = 16, dimC = 128;
   double t = runBench(dimA, dimB, dimC);
-	std::cout << "Achived clockspeed: " << t << std::endl;
-	return 0;
+  std::cout << "Achived clockspeed: " << t << std::endl;
+  return 0;
 }

@@ -54,4 +54,4 @@ or multiplication.
 
 
 ## TODO
-1. Fix gpu_densebench.cu
+1. Fix gpu_densebench.cu timing issue.
