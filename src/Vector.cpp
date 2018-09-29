@@ -49,18 +49,18 @@ Vector operator*(const double& a, const Vector& x) {
   return y;
 }
 
-void zeroize(Vector& v) {
-  for (int i = 0; i < v.numRows(); ++i)
-    v(i) = 0.0;
+void zeroize(Vector& x) {
+  for (int i = 0; i < x.numRows(); ++i)
+    x(i) = 0.0;
 }
 
-void randomize(Vector& v) {
+void randomize(Vector& x) {
   static std::default_random_engine generator;
   static std::uniform_real_distribution<double> distribution(2.0, 32.0);
   static auto dice = std::bind(distribution, generator);
 
-  for (int i = 0; i < v.numRows(); ++i)
-    v(i) = dice();
+  for (int i = 0; i < x.numRows(); ++i)
+    x(i) = dice();
 }
 
 double dotProd(const Vector& x, const Vector& y) {
@@ -72,27 +72,27 @@ double dotProd(const Vector& x, const Vector& y) {
   return sum;
 }
 
-double oneNorm(const Vector& v) {
+double oneNorm(const Vector& x) {
   double sum = 0.0;
-  for (int i = 0; i < v.numRows(); ++i)
-    sum += std::abs(v(i));
+  for (int i = 0; i < x.numRows(); ++i)
+    sum += std::abs(x(i));
 
   return sum;
 }
 
-double infinityNorm(const Vector& v) {
+double infinityNorm(const Vector& x) {
   double d = 0.0;
-  for (int i = 0; i < v.numRows(); ++i)
-    d = std::max(d, std::abs(v(i)));
+  for (int i = 0; i < x.numRows(); ++i)
+    d = std::max(d, std::abs(x(i)));
 
   return d;
 }
 
 /* will be affected by roundoff errors for v.size() > ~3000 */
-double twoNorm(const Vector& v) {
+double twoNorm(const Vector& x) {
   double sum = 0.0;
-  for (int i = 0; i < v.numRows(); ++i)
-    sum += v(i)*v(i);
+  for (int i = 0; i < x.numRows(); ++i)
+    sum += x(i)*x(i);
 
   return std::sqrt(sum);
 }
@@ -118,15 +118,6 @@ double ompTwoNorm(const Vector& x) {
 
 #ifdef _THREADING
 
-void ptn_worker(const Vector& x, size_t begin, size_t end, double& partial) {
-	double part_i = 0.0;
-	for (size_t i = begin; i < end; ++i)
-		part_i += x(i) * x(i);
-	{ std::lock_guard<std::mutex> partial_guard (partial_mutex);
-		partial += part_i;
-	}
-}
-
 double partitionedTwoNorm(const Vector& x, size_t partitions) {
 	double partial = 0.0;
 	size_t part = x.numRows()/partitions;
@@ -139,6 +130,15 @@ double partitionedTwoNorm(const Vector& x, size_t partitions) {
 		threads[i].join();
 
 	return std::sqrt(partial);
+}
+
+void ptn_worker(const Vector& x, size_t begin, size_t end, double& partial) {
+	double part_i = 0.0;
+	for (size_t i = begin; i < end; ++i)
+		part_i += x(i) * x(i);
+	{ std::lock_guard<std::mutex> partial_guard (partial_mutex);
+		partial += part_i;
+	}
 }
 
 double recursiveTwoNorm(const Vector& x, size_t levels) {

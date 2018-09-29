@@ -55,3 +55,4 @@ or multiplication.
 
 ## TODO
 1. Fix gpu_densebench.cu timing issue.
+2. Correct Matrix::qr() factorization.

@@ -63,21 +63,16 @@ double runBench(int M, int N, int K) {
   dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
   dim3 dimGrid(h_B.numCols() / dimBlock.x, h_A.numRows() / dimBlock.y);
 
-  double a = 0.0;
+  Timer T;
+  T.start();
   for (long i = 8; i <= 4096/4; i *= 2) {
     long numruns = 8L*1048L*1048L*16L/(i*i*i) + 2;
-
-    Timer T;
-    T.start();
     for (int k = 0; k < numruns; ++k)
       MatMulKernel<<<dimGrid, dimBlock>>>(d_Aarr, d_Barr, d_Carr, K, N);
     T.stop();
-
-    double t = T.elapsed();
-    double flops_per_multiply = i*i*i;
-    if (a < 2.0*1.e3*numruns*flops_per_multiply/t)
-    	a = 2.0*1.e3*numruns*flops_per_multiply/t;
   }
+  T.stop();
+  double t = T.elapsed();
 
   // Copy results back to host GPUMatrix
   cudaMemcpy(h_Carr, d_Carr, size, cudaMemcpyDeviceToHost);
@@ -92,7 +87,7 @@ double runBench(int M, int N, int K) {
   cudaFree(d_Barr);
   cudaFree(d_Carr);
 
-	return a;
+	return t;
 }
 
 int main() {

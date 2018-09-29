@@ -7,9 +7,10 @@
 */
 #include <iostream>
 #include "libhpc.h"
-// #include "Matrix.hpp"
-// #include "CSC.hpp"
-// #include "Vector.hpp"
+
+#ifndef _THREADING
+#define _THREADING
+#endif
 
 int main(int argc, char *argv[]) {
 
@@ -17,7 +18,7 @@ int main(int argc, char *argv[]) {
   randomizeMatrix(A);
   writeMatrix(A, std::cout);
 
-  Matrix R(20,20);
+  Matrix R = A;
   qr(A,R);
   writeMatrix(R, std::cout);
 
@@ -31,8 +32,11 @@ int main(int argc, char *argv[]) {
   B.streamMatrix(std::cout);
 
   Vector const& const_x = x;
-  size_t parts = 2;
-  std::cout << "2-Norm of x: " << twoNorm(const_x) << std::endl;
+  size_t partitions = 2;
+  double ansp = partitionedTwoNorm(const_x, 2);
+  double ansr = recursiveTwoNorm(const_x,2);
+  std::cout << "2-Norm of x: " << ansp << std::endl;
+  std::cout << "2-Norm of x: " << ansr << std::endl;
   writeVector(x, std::cout);
 
   return 0;

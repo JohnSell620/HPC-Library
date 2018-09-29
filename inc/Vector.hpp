@@ -44,11 +44,11 @@ private:
 Vector operator+(const Vector& x, const Vector& y);
 Vector operator-(const Vector& x, const Vector& y);
 Vector operator*(const double& a, const Vector& x);
-void zeroize(Vector& v);
-void randomize(Vector& v);
-double oneNorm(const Vector& v);
-double twoNorm(const Vector& v);
-double infinityNorm(const Vector& v);
+void zeroize(Vector& x);
+void randomize(Vector& x);
+double oneNorm(const Vector& x);
+double twoNorm(const Vector& x);
+double infinityNorm(const Vector& x);
 double dotProd(const Vector& x, const Vector& y);
 double ompTwoNorm(const Vector& x);
 double partitionedTwoNorm(const Vector& x, size_t partitions);

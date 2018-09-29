@@ -9,7 +9,7 @@ CXX		= c++
 GPU			= nvcc
 MPI 		= mpic++ # -cxx=clang++ # --enable-mpi-cxx
 
-OPTS		= -Ofast -march=native -DNDEBUG
+OPTS		= -Ofast -march=native -DNDEBUG -D_THREADING -pthread
 CPPFLAGS	+= -MD -MP
 PICKY		= -g -Wall # -Wextra -pedantic
 
