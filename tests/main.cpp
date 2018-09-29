@@ -5,7 +5,11 @@
 		@author Johnny Sellers
 		@version 0.1 07/03/2018
 */
+#include <iostream>
 #include "libhpc.h"
+// #include "Matrix.hpp"
+// #include "CSC.hpp"
+// #include "Vector.hpp"
 
 int main(int argc, char *argv[]) {
 
@@ -25,6 +29,11 @@ int main(int argc, char *argv[]) {
 
   B.matvec(x, y);
   B.streamMatrix(std::cout);
+
+  Vector const& const_x = x;
+  size_t parts = 2;
+  std::cout << "2-Norm of x: " << twoNorm(const_x) << std::endl;
+  writeVector(x, std::cout);
 
   return 0;
 }

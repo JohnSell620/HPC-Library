@@ -118,6 +118,15 @@ double ompTwoNorm(const Vector& x) {
 
 #ifdef _THREADING
 
+void ptn_worker(const Vector& x, size_t begin, size_t end, double& partial) {
+	double part_i = 0.0;
+	for (size_t i = begin; i < end; ++i)
+		part_i += x(i) * x(i);
+	{ std::lock_guard<std::mutex> partial_guard (partial_mutex);
+		partial += part_i;
+	}
+}
+
 double partitionedTwoNorm(const Vector& x, size_t partitions) {
 	double partial = 0.0;
 	size_t part = x.numRows()/partitions;
@@ -130,15 +139,6 @@ double partitionedTwoNorm(const Vector& x, size_t partitions) {
 		threads[i].join();
 
 	return std::sqrt(partial);
-}
-
-void ptn_worker(const Vector& x, size_t begin, size_t end, double& partial) {
-	double part_i = 0.0;
-	for (size_t i = begin; i < end; ++i)
-		part_i += x(i) * x(i);
-	{ std::lock_guard<std::mutex> partial_guard (partial_mutex);
-		partial += part_i;
-	}
 }
 
 double recursiveTwoNorm(const Vector& x, size_t levels) {

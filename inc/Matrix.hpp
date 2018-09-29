@@ -48,7 +48,7 @@ public:
 
   // void operator=(const Matrix& A);
 
-private:
+protected:
   int iRows, jCols;
   std::vector<double> arrayData;
 };

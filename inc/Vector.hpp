@@ -51,7 +51,7 @@ double twoNorm(const Vector& v);
 double infinityNorm(const Vector& v);
 double dotProd(const Vector& x, const Vector& y);
 double ompTwoNorm(const Vector& x);
-// double partitionedTwoNorm(const Vector& x, size_t partitions);
+double partitionedTwoNorm(const Vector& x, size_t partitions);
 void ptn_worker(const Vector& x, size_t begin, size_t end, double& partial);
 double recursiveTwoNorm(const Vector& x, size_t levels);
 double rtn_worker(const Vector& x, size_t begin, size_t end, size_t level);

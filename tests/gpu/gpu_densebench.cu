@@ -7,69 +7,70 @@
 */
 #include <iostream>
 #include <functional>
-#include "Matrix.hpp"
-#include "Timer.hpp"
+#include <algorithm>
+#include <random>
+#include "../../inc/Matrix.hpp"
+#include "../../inc/Timer.hpp"
 
-__global__
-void matmat_multiply(const Matrix *A, const Matrix *B, Matrix *C)
-{
-  multiply(A, B, C);
+#define BLOCK_SIZE 16
+
+class GPUMatrix: public Matrix {
+public:
+  GPUMatrix(int M, int N):Matrix(M,N) {}
+  GPUMatrix():Matrix() {}
+
+  __host__ __device__ std::vector<double>& elements() {
+    return arrayData;
+  }
+};
+
+// Without shared memory
+__global__ void MatMulKernel(double *A, double *B, double *C, int Awidth, int Bwidth) {
+  double Cvalue = 0;
+  int row = blockIdx.y * blockDim.y + threadIdx.y;
+  int col = blockIdx.x * blockDim.x + threadIdx.x;
+  for (int k = 0; k < Awidth; ++k)
+    Cvalue += A[row*Awidth+k] * B[k*Bwidth+col];
+  C[row*Bwidth+col] = Cvalue;
 }
 
+double runBench(int M, int N, int K) {
+  // Host copies of GPUMatrix A, B, C
+  GPUMatrix h_A(M, K), h_B(K, N), h_C(M, N);
+  randomizeMatrix(h_A);
+  randomizeMatrix(h_B);
+  randomizeMatrix(h_C);
 
-double runBench(int M, int N, int K, long numruns);
+  // Copy host matrix elements to arrays for kernel
+  double h_Aarr[M*K], h_Barr[K*N], h_Carr[M*N];
+  std::copy(h_A.elements().begin(), h_A.elements().end(), h_Aarr);
+  std::copy(h_B.elements().begin(), h_B.elements().end(), h_Barr);
 
-int main() {
+  // Allocate space for device copies of A, B elements
+  double *d_Aarr;
+  size_t size = h_A.numRows()*h_A.numCols()*sizeof(double);
+  cudaMalloc((void **)&d_Aarr, size);
+  cudaMemcpy(d_Aarr, h_Aarr, size, cudaMemcpyHostToDevice);
+  double *d_Barr;
+  size = K * N * sizeof(double);
+  cudaMalloc((void **)&d_Barr, size);
+  cudaMemcpy(d_Barr, h_Barr, size, cudaMemcpyHostToDevice);
+  double *d_Carr;
+  size = M * N * sizeof(double);
+  cudaMalloc((void **)&d_Carr, size);
 
-	double clockspeed			= 3.4e9;
-	double rate_h12		    = clockspeed*8/12;
-	double rate_h20				= clockspeed*8/20;
-	double rate_cbh12		  = clockspeed*8/12;
-	double rate_cbh20			= clockspeed*8/20;
-
-  double achieved_gpu = runBench(matmat_gpu);
-
-
-	std::cout << "Routine Clock CPUID Loop-ops Scalar 2-wide 4-wide 4-wide-fma Achieved" << std::endl;
-
-	std::cout << "hoisted " << clockspeed << " AVX2 12 " << rate_h12 << " " << 2*rate_h12 << " " << 4*rate_h12 << " " << 8*rate_h12 << " " << achieved_h << std::endl;
-	std::cout << "hoisted " << clockspeed << " AVX2 20 " << rate_h20 << " " << 2*rate_h20 << " " << 4*rate_h20 << " " << 8*rate_h20 << " " << achieved_h << std::endl;
-	std::cout << "copyblockhoisted " << clockspeed << " AVX2 12 " << rate_cbh12 << " " << 2*rate_cbh12 << " " << 4*rate_cbh12 << " " << 8*rate_cbh12 << " " << achieved_cbh << std::endl;
-	std::cout << "copyblockhoisted " << clockspeed << " AVX2 20 " << rate_cbh20 << " " << 2*rate_cbh20 << " " << 4*rate_cbh20 << " " << 8*rate_cbh20 << " " << achieved_cbh << std::endl;
-
-	return 0;
-
-}
-
-
-double runBench(int M, int N, int K, long numruns) {
-  Matrix A(M, K), B(K, N), C(M, N);           // host copies
-  Matrix *d_A(M,K), *d_B(K, N), *d_C(M, N);   // device copies
-
-  // Allocate space for device copies
-  cudaMalloc((void **)&d_A, size_A);
-  cudaMalloc((void **)&d_A, size_B);
-  cudaMalloc((void **)&d_A, size_C);
-
-  randomizeMatrix(A);
-  randomizeMatrix(B);
-  randomizeMatrix(C);
-
-  // Copy inputs to device
-  cudaMemcpy(d_A, &A, size_A, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_B, &B, size_B, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_C, &C, size_C, cudaMemcpyHostToDevice);
+  // Block and grid dimensions for kernel
+  dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
+  dim3 dimGrid(h_B.numCols() / dimBlock.x, h_A.numRows() / dimBlock.y);
 
 	double a = 0.0;
   for (long i = 8; i <= 4096/4; i *= 2) {
-		long numruns = 8L*1048L/(i*i*i) + 2;
-    // double t = bench(i, i, i, numruns, f);
+	  long numruns = 8L*1048L*1048L*16L/(i*i*i) + 2;
+
     Timer T;
     T.start();
-    for (int i = 0; i < numruns; ++i) {
-      // f(A, B, C);
-      matmat_multiply<<<1,1>>>(d_A, d_B, d_C);
-    }
+    for (int k = 0; k < numruns; ++k)
+      MatMulKernel<<<dimGrid, dimBlock>>>(d_Aarr, d_Barr, d_Carr, K, N);
     T.stop();
 
     double t = T.elapsed();
@@ -78,11 +79,25 @@ double runBench(int M, int N, int K, long numruns) {
 			a = 2.0*1.e3*numruns*flops_per_multiply/t;
   }
 
-  // Copy results back to host
-  cudaMemcpy(&C, d_C, size_C, cudaMemcpyDeviceToHost);
+  // Copy results back to host GPUMatrix
+  cudaMemcpy(h_Carr, d_Carr, size, cudaMemcpyDeviceToHost);
+  std::copy(h_Carr, h_Carr + size, std::back_inserter(h_C.elements()));
+
+  // Test print 1-Norm of C
+  Matrix& C = h_C;
+  std::cout << "1-Norm of C: " << oneNorm(C) << std::endl;
 
   // Cleanup
-  cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
+  cudaFree(d_Aarr);
+  cudaFree(d_Barr);
+  cudaFree(d_Carr);
 
 	return a;
+}
+
+int main() {
+  int dimA = 256, dimB = 16, dimC = 128;
+  double t = runBench(dimA, dimB, dimC);
+	std::cout << "Achived clockspeed: " << t << std::endl;
+	return 0;
 }
