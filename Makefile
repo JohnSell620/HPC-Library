@@ -72,7 +72,7 @@ $(OBJ_PATH)/%.o : $(MPI_PATH)/%.cpp
 		  $(MPI) -c $(MPIFLAGS) $(INCLUDES) $< -o $@
 
 $(OBJ_PATH)/%.o : $(GPU_PATH)/%.cu
-		 $(GPU) -c $(GPUFLAGS) $(INCLUDES) $< -o $@
+		  $(GPU) -c $(GPUFLAGS) $(INCLUDES) $< -o $@
 
 %.hpp.gch	: %.hpp
 		  $(CXX) $(LANG) -x c++-header $< -o $(GCH_PATH)/$@
