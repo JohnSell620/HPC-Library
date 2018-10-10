@@ -15,7 +15,7 @@ PICKY		= -g -Wall # -Wextra -pedantic
 
 CXXFLAGS	= $(LANG) $(OPTS)
 GPUFLAGS	= $(LANG)
-MPIFLAGS	= $(LANG) # $(PICKY)
+MPIFLAGS	= $(LANG) $(OPTS) # $(PICKY)
 
 INC_PATH	= inc
 LIB_PATH	= lib

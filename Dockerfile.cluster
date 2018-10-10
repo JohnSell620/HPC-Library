@@ -1,0 +1,62 @@
+FROM nvidia/cuda:9.1-devel-ubuntu16.04
+
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils && \
+    apt-get install -y wget && \
+    apt-get install -y build-essential && \
+    apt-get install -y sudo
+
+
+#### Install OpenMPI ####
+ARG OMPI_V="v3.1"
+ARG OMPI_VERSION="3.1.2"
+ARG OMPI_CONFIGURE_OPTIONS="--prefix=$HOME/openmpi --enable-mpi-cxx"
+ARG OMPI_MAKE_OPTIONS="all"
+
+
+# Download, build, and install OpenMPI
+RUN mkdir /tmp/ompi-src
+WORKDIR /tmp/ompi-src
+RUN wget http://www.mpich.org/static/downloads/3.2.1/mpich-3.2.1.tar.gz && \
+    tar xfz mpich-3.2.1.tar.gz && \
+    cd mpich-3.2.1 && \
+    ./configure --disable-fortran && \
+    make all && make install && \
+    rm -rf /tmp/ompi-src
+
+
+#### Test OpenMPI Installation ####
+RUN mkdir /tmp/ompi-test
+WORKDIR /tmp/ompi-test
+COPY ompi-test .
+RUN bash ./test.sh
+RUN rm -rf /tmp/ompi-test
+
+
+#### Clean Up ####
+WORKDIR /
+RUN rm -rf /tmp/*
+
+
+#### Add Default User ####
+ARG USER=mpi
+ENV USER ${USER}
+RUN adduser -disabled-password ${USER} \
+      && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+ENV USER_HOME /home/${USER}
+RUN chown -R ${USER}:${USER} ${USER_HOME}
+
+
+#### Create Working Directory for User ####
+ARG WORKDIR=/HPC-Library
+ENV WORKDIR ${WORKDIR}
+RUN mkdir ${WORKDIR}
+WORKDIR ${WORKDIR}
+
+
+#### Copy HPC-Library and make MPI_EXECS ####
+COPY HPCcode/ .
+RUN chown -R ${USER}:${USER} ${WORKDIR}
+USER ${USER}
+# RUN make all
+
+CMD ["/bin/bash"]

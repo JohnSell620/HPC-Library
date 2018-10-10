@@ -7,9 +7,9 @@ Some benchmarking programs depend on OpenMPI, but it's not required for most pro
 1. Download OpenMPI (recommend extracting contents in /usr/local).
 2. Run the following commands.
 ```bash
-$ tar -xzvf openmpi-x.x.x.tar/gz
+$ tar -xzvf openmpi-x.x.x.tar.gz
 $ cd openmpi-x.x.x
-$ sudo ./configure --prefix-$HOME/openmpi --enable-mpi-cxx
+$ sudo ./configure --prefix=$HOME/openmpi --enable-mpi-cxx
 $ sudo make all
 $ sudo make install
 ```
@@ -28,7 +28,7 @@ $ mkdir obj exe lib
 $ make classes
 $ ar rcs lib/libHPCLibrary.a obj/*.o
 ```
-The following command links the static library to `main.cpp`.
+The following command links the static library to `main.cpp`:
 ```bash
 $ c++ -std=c++11 -I ./inc -L ./lib -static ./tests/main.cpp -lHPCLibrary -o ./exe/libHPCLibraryClient
 ```
@@ -56,3 +56,4 @@ or multiplication.
 ## TODO
 1. Fix gpu_densebench.cu timing issue.
 2. Correct Matrix::qr() factorization.
+3. Implement cluster of Docker containers.
