@@ -1,10 +1,9 @@
-/**
-		Matrix.cpp
-		Description: Matrix class.
-
-		@author Johnny Sellers
-		@version 0.1 05/10/2017
-*/
+/*
+ * Matrix.cpp
+ * Description: Matrix class.
+ * @author Johnny Sellers
+ * @version 0.1 05/10/2017
+ */
 #include <cassert>
 #include <cmath>
 #include <random>

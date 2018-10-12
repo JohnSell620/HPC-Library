@@ -1,10 +1,9 @@
-/**
-		Matrix.hpp
-		Description: Matrix class.
-
-		@author Johnny Sellers
-		@version 0.1 05/10/2017
-*/
+/*
+ * Matrix.hpp
+ * Description: Matrix class.
+ * @author Johnny Sellers
+ * @version 0.1 05/10/2017
+ */
 #if !defined(MATRIX_HPP)
 #define MATRIX_HPP
 

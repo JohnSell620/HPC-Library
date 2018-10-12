@@ -1,10 +1,9 @@
-/**
-		COO.hpp
-		Description: Implements the COO Matrix as array of structs.
-
-		@author Johnny Sellers
-		@version 0.1 05/30/2017
-*/
+/*
+ * COO.hpp
+ * Description: Implements the COO Matrix as array of structs.
+ * @author Johnny Sellers
+ * @version 0.1 05/30/2017
+ */
 #ifndef COO_HPP
 #define COO_HPP
 

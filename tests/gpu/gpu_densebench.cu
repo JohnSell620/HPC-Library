@@ -1,10 +1,10 @@
-/**
-		gpu_densebench.cpp
-		Description: Benchmarking of dense matrix-matrix multiplication on GPU.
-
-		@author Johnny Sellers
-		@version 1.1 06/11/2017
-*/
+/*
+ * gpu_densebench.cpp
+ * Description: Benchmarking of dense matrix-matrix
+ * multiplication on GPU.
+ * @author Johnny Sellers
+ * @version 1.1 06/11/2017
+ */
 #include <iostream>
 #include <functional>
 #include <algorithm>
@@ -25,7 +25,8 @@ public:
 };
 
 // Without shared memory
-__global__ void MatMulKernel(double *A, double *B, double *C, int Awidth, int Bwidth) {
+__global__
+void MatMulKernel(double *A, double *B, double *C, int Awidth, int Bwidth) {
   double Cvalue = 0;
   int row = blockIdx.y * blockDim.y + threadIdx.y;
   int col = blockIdx.x * blockDim.x + threadIdx.x;

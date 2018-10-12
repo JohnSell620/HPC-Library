@@ -1,11 +1,11 @@
-/**
-		CSC.cpp
-		Description: Implements CSC.hpp function readMatrix and piscretize
-    methods.
-
-		@author Johnny Sellers
-		@version 0.1 05/10/2017
-*/
+/*
+ * CSC.cpp
+ * Description: Implements CSC.hpp function readMatrix
+ * and piscretize methods.
+ *
+ * @author Johnny Sellers
+ * @version 0.1 05/10/2017
+ */
 #include <cassert>
 #include <string>
 #include <iostream>

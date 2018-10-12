@@ -1,10 +1,9 @@
-/**
-		CSC.hpp
-		Description: Compressed-sparse-column implementation.
-
-		@author Johnny Sellers
-		@version 0.1 04/28/2017
-*/
+/*
+ * CSC.hpp
+ * Description: Compressed-sparse-column implementation.
+ * @author Johnny Sellers
+ * @version 0.1 04/28/2017
+ */
 #ifndef CSC_HPP
 #define CSC_HPP
 

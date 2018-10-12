@@ -1,10 +1,10 @@
-/**
-		sparsebench.cpp
-		Description: Estimates and prints floating point performance of the sparse matrix-vector product of the COO Matrix class.
-
-		@author Johnny Sellers
-		@version 0.1 05/30/2017
-*/
+/*
+ * sparsebench.cpp
+ * Description: Estimates and prints floating point performance
+ * of the sparse matrix-vector product of the COO Matrix class.
+ * @author Johnny Sellers
+ * @version 0.1 05/30/2017
+ */
 #include <cassert>
 #include <cmath>
 #include <iostream>

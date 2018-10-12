@@ -1,10 +1,10 @@
-/**
-		densebench.cpp
-		Description: Benchmarking of dense matrix-matrix multiplication.
-
-		@author Johnny Sellers
-		@version 1.1 04/25/2017
-*/
+/*
+ * densebench.cpp
+ * Description: Benchmarking of dense matrix-matrix
+ * multiplication.
+ * @author Johnny Sellers
+ * @version 1.1 04/25/2017
+ */
 #include <iostream>
 #include <functional>
 #include "Matrix.hpp"

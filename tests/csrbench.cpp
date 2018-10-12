@@ -1,10 +1,10 @@
-/**
-		csrbench.cpp
-		Description: csrbench.cpp for PS5 -- to compare CSR performance with Roofline model
-
-		@author Johnny Sellers
-		@version 1.1 05/10/2017
-*/
+/*
+ * csrbench.cpp
+ * Description: csrbench.cpp for PS5 -- to compare CSR
+ * performance with Roofline model
+ * @author Johnny Sellers
+ * @version 1.1 05/10/2017
+ */
 #include <cassert>
 #include <cmath>
 #include <iostream>

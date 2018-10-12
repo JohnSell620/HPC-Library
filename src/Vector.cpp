@@ -1,10 +1,9 @@
-/**
-		Vector.cpp
-		Description: Implements Vector.hpp function prototypes.
-
-		@author Johnny Sellers
-		@version 0.1 05/10/2017
-*/
+/*
+ * Vector.cpp
+ * Description: Implements Vector.hpp function prototypes.
+ * @author Johnny Sellers
+ * @version 0.1 05/10/2017
+ */
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -88,7 +87,7 @@ double infinityNorm(const Vector& x) {
   return d;
 }
 
-/* will be affected by roundoff errors for v.size() > ~3000 */
+/* Will be affected by roundoff errors for v.size() > ~3000. */
 double twoNorm(const Vector& x) {
   double sum = 0.0;
   for (int i = 0; i < x.numRows(); ++i)

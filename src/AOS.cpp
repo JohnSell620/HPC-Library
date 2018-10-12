@@ -1,10 +1,9 @@
-/**
-		AOS.cpp
-		Description: Implements AOS.hpp function prototypes.
-
-		@author Johnny Sellers
-		@version 0.1 05/30/2017
-*/
+/*
+ * AOS.cpp
+ * Description: Implements AOS.hpp function prototypes. *
+ * @author Johnny Sellers
+ * @version 0.1 05/30/2017
+ */
 #include "AOS.hpp"
 
 Vector operator*(const AOSMatrix& A, const Vector& x) {

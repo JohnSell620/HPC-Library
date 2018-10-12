@@ -1,10 +1,9 @@
-/**
-		CSR.hpp
-		Description: Compressed-sparse-row matrix implementation.
-
-		@author Johnny Sellers
-		@version 0.1 05/10/2017
-*/
+/*
+ * CSR.hpp
+ * Description: Compressed-sparse-row matrix implementation.
+ * @author Johnny Sellers
+ * @version 0.1 05/10/2017
+ */
 #ifndef CSR_HPP
 #define CSR_HPP
 

@@ -1,10 +1,10 @@
-/**
-		bench.cpp
-		Description: Benchmarking program to compare CSC and AOS implementations with COO implementation
-
-		@author Johnny Sellers
-		@version 0.1 04/28/2017
-*/
+/*
+ * bench.cpp
+ * Description: Benchmarking program to compare CSC and AOS
+ * implementations with COO implementation
+ * @author Johnny Sellers
+ * @version 0.1 04/28/2017
+ */
 #include <cassert>
 #include <cmath>
 #include <iostream>

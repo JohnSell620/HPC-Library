@@ -1,10 +1,9 @@
-/**
-		Vector.hpp
-		Description: Vector class.
-
-		@author Johnny Sellers
-		@version 0.1 05/10/2017
-*/
+/*
+ * Vector.hpp
+ * Description: Vector class.
+ * @author Johnny Sellers
+ * @version 0.1 05/10/2017
+ */
 #if !defined(VECTOR_HPP)
 #define VECTOR_HPP
 

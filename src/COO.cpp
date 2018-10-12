@@ -1,10 +1,9 @@
-/**
-		COO.cpp
-		Description: Implements COO.hpp function prototypes.
-
-		@author Johnny Sellers
-		@version 0.1 05/30/2017
-*/
+/*
+ * COO.cpp
+ * Description: Implements COO.hpp function prototypes.
+ * @author Johnny Sellers
+ * @version 0.1 05/30/2017
+ */
 #include "COO.hpp"
 
 #ifdef _OPENMP

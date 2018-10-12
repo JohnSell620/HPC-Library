@@ -1,10 +1,9 @@
-/**
-		AOS.hpp
-		Description: Implements the COO Matrix as array of structs.
-
-		@author Johnny Sellers
-		@version 0.1 05/30/2017
-*/
+/*
+ * AOS.hpp
+ * Description: Implements the COO Matrix as array of structs.
+ * @author Johnny Sellers
+ * @version 0.1 05/30/2017
+ */
 #ifndef __AOS_HPP
 #define __AOS_HPP
 

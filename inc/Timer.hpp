@@ -1,10 +1,9 @@
-/**
-		Timer.hpp
-		Description: Timer class for benchmarking runs.
-
-		@author Johnny Sellers
-		@version 0.1 04/28/2017
-*/
+/*
+ * Timer.hpp
+ * Description: Timer class for benchmarking runs.
+ * @author Johnny Sellers
+ * @version 0.1 04/28/2017
+ */
 #if !defined(TIMER_HPP)
 #define TIMER_HPP
 

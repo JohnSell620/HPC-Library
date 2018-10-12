@@ -1,10 +1,10 @@
-/**
-		CSR.cpp
-		Description: Implements CSR.hpp function prototypes
-
-		@author Johnny Sellers
-		@version 0.1 05/10/2017
-*/
+/*
+ * CSR.cpp
+ * Description: Implements CSR.hpp function prototypes
+ *
+ * @author Johnny Sellers
+ * @version 0.1 05/10/2017
+ */
 #include <cassert>
 #include <string>
 #include <iostream>

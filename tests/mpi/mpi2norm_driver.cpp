@@ -1,10 +1,9 @@
-/**
-		mpi2norm_driver.cpp, AMATH 583
-		Description: mpi2norm_driver.cpp for PS8
-
-		@author Johnny Sellers
-		@version 0.1 05/30/2017
-*/
+/*
+ * mpi2norm_driver.cpp, AMATH 583
+ * Description: mpi2norm_driver.cpp for PS8
+ * @author Johnny Sellers
+ * @version 0.1 05/30/2017
+ */
 #include <iostream>
 #include <string>
 #include <cmath>

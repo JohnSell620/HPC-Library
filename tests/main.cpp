@@ -1,10 +1,9 @@
-/**
-		main.cpp
-		Description: Example using static library libhpc.h.
-
-		@author Johnny Sellers
-		@version 0.1 07/03/2018
-*/
+/*
+ * main.cpp
+ * Description: Example using static library libhpc.h.
+ * @author Johnny Sellers
+ * @version 0.1 07/03/2018
+ */
 #include <iostream>
 #include "libhpc.h"
 
