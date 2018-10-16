@@ -14,6 +14,7 @@ CPPFLAGS	+= -MD -MP
 PICKY		= -g -Wall # -Wextra -pedantic
 
 CXXFLAGS	= $(LANG) $(OPTS)
+UGTFLAGS		= $(LANG) $(OPTS) -lgtest
 GPUFLAGS	= $(LANG)
 MPIFLAGS	= $(LANG) $(OPTS) # $(PICKY)
 
@@ -24,14 +25,16 @@ MPI_PATH 	= tests/mpi
 GPU_PATH	= tests/gpu
 EXE_PATH	= exe
 GCH_PATH	= gch
+UGT_PATH 	= tests/unittests
 
 INCLUDES	= -I ./$(INC_PATH)
 
 VPATH 		:= src tests obj inc
 HEADERS	= $(wildcard inc/*.hpp)
-TESTS		= $(shell find tests/ ! -name "mpi*.cpp" -name "*.cpp")
+TESTS		= $(shell find tests/ ! -name "mpi*.cpp" -name "*.cpp" ! -name "*unittests.cpp")
 MPI_TESTS 	= $(wildcard tests/mpi/*.cpp)
 GPU_TESTS	= $(wildcard tests/gpu/*.cu)
+UNIT_TESTS	= $(wildcard tests/unittests/*.cpp)
 SOURCES	= $(wildcard src/*.cpp)
 
 # $(info $$TESTS is [${TESTS}])
@@ -40,17 +43,20 @@ CLASSES	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(SOURCES)))
 BENCH 		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(TESTS)))
 MPI_BENCH 	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(MPI_TESTS)))
 GPU_BENCH	= $(patsubst %.cu, $(OBJ_PATH)/%.o, $(notdir $(GPU_TESTS)))
+GTEST	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(UNIT_TESTS)))
 
-OBJECTS	= $(CLASSES) $(BENCH) $(MPI_BENCH) $(GPU_BENCH)
+OBJECTS	= $(CLASSES) $(BENCH) $(MPI_BENCH) $(GPU_BENCH) $(GTEST)
 TARGETS	= $(notdir $(BENCH))
 MPI_TARGETS	= $(notdir $(MPI_BENCH))
 GPU_TARGETS	= $(notdir $(GPU_BENCH))
+GTEST_TARGETS = $(notdir $(GTEST))
 PCHS		= $(notdir $(HEADERS:=.gch))
 EXECS		= $(TARGETS:.o=)
 MPI_EXECS	= $(MPI_TARGETS:.o=)
 GPU_EXECS	= $(GPU_TARGETS:.o=)
+GTEST_EXECS	= $(GTEST_TARGETS:.o=)
 
-all		 : $(OBJECTS) $(EXECS) $(MPI_EXECS) $(GPU_EXECS)
+all		 : $(OBJECTS) $(EXECS) $(MPI_EXECS) $(GPU_EXECS) $(GTEST_EXECS)
 
 classes 	 : $(CLASSES)
 
@@ -65,6 +71,9 @@ $(MPI_EXECS)	 :
 $(GPU_EXECS)	 :
 		  $(GPU) $(GPUFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
 
+$(GTEST_EXECS)	 :
+		  $(CXX) $(LANG) $(OPTS) $(INCLUDES) $^ -lgtest -o $(EXE_PATH)/$@
+
 $(OBJ_PATH)/%.o : %.cpp
 		  $(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
 
@@ -74,6 +83,9 @@ $(OBJ_PATH)/%.o : $(MPI_PATH)/%.cpp
 $(OBJ_PATH)/%.o : $(GPU_PATH)/%.cu
 		  $(GPU) -c $(GPUFLAGS) $(INCLUDES) $< -o $@
 
+$(OBJ_PATH)/%.o : $(UGT_PATH)/%.cpp
+		  $(CXX) -c $(UGTFLAGS) $(INCLUDES) $< -o $@
+
 %.hpp.gch	: %.hpp
 		  $(CXX) $(LANG) -x c++-header $< -o $(GCH_PATH)/$@
 
@@ -82,7 +94,7 @@ $(OBJ_PATH)/%.o : $(GPU_PATH)/%.cu
 clean:
 	/bin/rm -f obj/* exe/* gch/*
 
-main			: main.o CSC.o Matrix.o Vector.o
+unittests			: unittests.o CSC.o Matrix.o Vector.o
 bench			: bench.o AOS.o COO.o CSC.o Vector.o
 csrbench		: csrbench.o CSR.o Vector.o
 densebench		: densebench.o Matrix.o Vector.o
@@ -103,4 +115,4 @@ CSC.o			: CSC.hpp Vector.hpp
 CSR.o			: CSR.hpp Vector.hpp
 Matrix.o		: Matrix.hpp Vector.hpp
 Vector.o		: Vector.hpp
-main.o			: main.cpp Matrix.hpp Vector.hpp
+unittests.o			: unittests/unittests.cpp Matrix.hpp Vector.hpp
