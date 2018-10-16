@@ -14,7 +14,7 @@ CPPFLAGS	+= -MD -MP
 PICKY		= -g -Wall # -Wextra -pedantic
 
 CXXFLAGS	= $(LANG) $(OPTS)
-UGTFLAGS		= $(LANG) $(OPTS) -lgtest
+UGTFLAGS	= $(LANG) $(OPTS) -lgtest
 GPUFLAGS	= $(LANG)
 MPIFLAGS	= $(LANG) $(OPTS) # $(PICKY)
 
@@ -43,13 +43,13 @@ CLASSES	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(SOURCES)))
 BENCH 		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(TESTS)))
 MPI_BENCH 	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(MPI_TESTS)))
 GPU_BENCH	= $(patsubst %.cu, $(OBJ_PATH)/%.o, $(notdir $(GPU_TESTS)))
-GTEST	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(UNIT_TESTS)))
+GTEST		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(UNIT_TESTS)))
 
 OBJECTS	= $(CLASSES) $(BENCH) $(MPI_BENCH) $(GPU_BENCH) $(GTEST)
 TARGETS	= $(notdir $(BENCH))
 MPI_TARGETS	= $(notdir $(MPI_BENCH))
 GPU_TARGETS	= $(notdir $(GPU_BENCH))
-GTEST_TARGETS = $(notdir $(GTEST))
+GTEST_TARGETS  = $(notdir $(GTEST))
 PCHS		= $(notdir $(HEADERS:=.gch))
 EXECS		= $(TARGETS:.o=)
 MPI_EXECS	= $(MPI_TARGETS:.o=)
@@ -94,7 +94,6 @@ $(OBJ_PATH)/%.o : $(UGT_PATH)/%.cpp
 clean:
 	/bin/rm -f obj/* exe/* gch/*
 
-unittests			: unittests.o CSC.o Matrix.o Vector.o
 bench			: bench.o AOS.o COO.o CSC.o Vector.o
 csrbench		: csrbench.o CSR.o Vector.o
 densebench		: densebench.o Matrix.o Vector.o
@@ -102,6 +101,7 @@ sparsebench		: sparsebench.o COO.o Vector.o
 mpi2norm_driver	: mpi2norm_driver.o Vector.o
 mpi2norm_timer		: mpi2norm_timer.o Vector.o
 gpu_densebench		: gpu_densebench.o Matrix.o Vector.o
+unittests		: unittests.o CSC.o Matrix.o Vector.o
 bench.o		: bench.cpp AOS.hpp CSC.hpp COO.hpp Vector.hpp
 csrbench.o		: csrbench.cpp CSR.hpp Vector.hpp
 densebench.o		: densebench.cpp Matrix.hpp
