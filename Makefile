@@ -37,7 +37,7 @@ GPU_TESTS	= $(wildcard tests/gpu/*.cu)
 UNIT_TESTS	= $(wildcard tests/unittests/*.cpp)
 SOURCES	= $(wildcard src/*.cpp)
 
-# $(info $$TESTS is [${TESTS}])
+$(info $$TESTS is [${TESTS}])
 
 CLASSES	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(SOURCES)))
 BENCH 		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(TESTS)))
@@ -51,6 +51,7 @@ MPI_TARGETS	= $(notdir $(MPI_BENCH))
 GPU_TARGETS	= $(notdir $(GPU_BENCH))
 GTEST_TARGETS  = $(notdir $(GTEST))
 PCHS		= $(notdir $(HEADERS:=.gch))
+
 EXECS		= $(TARGETS:.o=)
 MPI_EXECS	= $(MPI_TARGETS:.o=)
 GPU_EXECS	= $(GPU_TARGETS:.o=)
@@ -77,6 +78,9 @@ $(GTEST_EXECS)	 :
 $(OBJ_PATH)/%.o : %.cpp
 		  $(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
 
+$(OBJ_PATH)/Laplacian.o : Laplacian.cpp
+		  $(MPI) -c $(MPIFLAGS) $(INCLUDES) $< -o $@
+
 $(OBJ_PATH)/%.o : $(MPI_PATH)/%.cpp
 		  $(MPI) -c $(MPIFLAGS) $(INCLUDES) $< -o $@
 
@@ -97,22 +101,31 @@ clean:
 bench			: bench.o AOS.o COO.o CSC.o Vector.o
 csrbench		: csrbench.o CSR.o Vector.o
 densebench		: densebench.o Matrix.o Vector.o
+main			: main.o Matrix.o Vector.o
 sparsebench		: sparsebench.o COO.o Vector.o
 mpi2norm_driver	: mpi2norm_driver.o Vector.o
 mpi2norm_timer		: mpi2norm_timer.o Vector.o
+mpiHeatEq2D-CG		: mpiHeatEq2D-CG.o Grid.o Laplacian.o
+mpiHeatEq2D-IR		: mpiHeatEq2D-IR.o Grid.o Laplacian.o
 gpu_densebench		: gpu_densebench.o Matrix.o Vector.o
 unittests		: unittests.o CSC.o Matrix.o Vector.o
+
 bench.o		: bench.cpp AOS.hpp CSC.hpp COO.hpp Vector.hpp
 csrbench.o		: csrbench.cpp CSR.hpp Vector.hpp
 densebench.o		: densebench.cpp Matrix.hpp
+main.o		: main.cpp Matrix.hpp
 sparsebench.o		: sparsebench.cpp COO.hpp Vector.hpp
 mpi2norm_timer.o	: mpi/mpi2norm_timer.cpp Vector.hpp
 mpi2norm_driver.o	: mpi/mpi2norm_driver.cpp Vector.hpp
+mpiHeatEq2D-CG.o	: mpi/mpiHeatEq2D-CG.cpp Grid.hpp Laplacian.hpp
+mpiHeatEq2D-IR.o	: mpi/mpiHeatEq2D-IR.cpp Laplacian.hpp
 gpu_densebench.o	: gpu/gpu_densebench.cu
+unittests.o		: unittests/unittests.cpp Matrix.hpp Vector.hpp
 AOS.o			: AOS.hpp Vector.hpp
 COO.o			: COO.hpp Vector.hpp
 CSC.o			: CSC.hpp Vector.hpp
 CSR.o			: CSR.hpp Vector.hpp
 Matrix.o		: Matrix.hpp Vector.hpp
 Vector.o		: Vector.hpp
-unittests.o			: unittests/unittests.cpp Matrix.hpp Vector.hpp
+Laplacian.o		: Laplacian.hpp
+Grid.o		: Grid.hpp

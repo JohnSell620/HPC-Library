@@ -1,6 +1,6 @@
 /*
- * mpi2norm_driver.cpp, AMATH 583
- * Description: mpi2norm_driver.cpp for PS8
+ * mpi2norm_driver.cpp
+ * Description: Driver program for MPI 2-norm computation.
  * @author Johnny Sellers
  * @version 0.1 05/30/2017
  */
@@ -9,12 +9,11 @@
 #include <cmath>
 #include <mpi.h>
 #include "Vector.hpp"
-// #include "../../inc/Vector.hpp"
 
 double mpiTwoNorm(const Vector& v);
 
-int main(int argc, char* argv[]) {
-  MPI_Init(NULL, NULL);
+int main(int argc, char **argv) {
+	MPI_Init(&argc, &argv);
 
   int world_rank, world_size;
   MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
