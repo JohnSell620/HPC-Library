@@ -1,5 +1,5 @@
 ## Overview
-This library consists mainly of various matrix classes with computational methods like QR factorization, matrix-vector and matrix-matrix multiplication, etc. Testing MPI and GPU computations is done using Cuda, NVIDIA Container Runtime, and Docker Compose.
+This library consists mainly of various matrix classes with computational methods like QR factorization, matrix-vector and matrix-matrix multiplication, etc. Testing MPI and GPU computations is done using CUDA, NVIDIA Container Runtime, and Docker Compose.
 
 Credit to Nikyle Nguyen for the cluster implementation on Alpine Linux using Docker Compose. See project at https://github.com/NLKNguyen/alpine-mpich.
 
