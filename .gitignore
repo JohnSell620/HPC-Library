@@ -1,4 +1,10 @@
-obj
-exe
-dev
-gch
+base
+onbuild
+ssh
+swarm.sh
+remove_image.sh
+!HPCLibrary
+HPCLibrary/obj
+HPCLibrary/exe
+HPCLibrary/dev
+HPCLibrary/gch

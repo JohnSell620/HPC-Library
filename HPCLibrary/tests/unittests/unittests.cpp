@@ -10,7 +10,8 @@
 #include <fstream>
 #include <sstream>
 #include <cstring>
-#include "libhpc.h"
+#include "Matrix.hpp"
+#include "CSC.hpp"
 
 #ifndef _THREADING
 #define _THREADING

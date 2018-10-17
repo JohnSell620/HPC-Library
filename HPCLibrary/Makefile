@@ -37,7 +37,7 @@ GPU_TESTS	= $(wildcard tests/gpu/*.cu)
 UNIT_TESTS	= $(wildcard tests/unittests/*.cpp)
 SOURCES	= $(wildcard src/*.cpp)
 
-$(info $$TESTS is [${TESTS}])
+# $(info $$TESTS is [${TESTS}])
 
 CLASSES	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(SOURCES)))
 BENCH 		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(TESTS)))
