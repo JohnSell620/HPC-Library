@@ -113,7 +113,7 @@ unittests		: unittests.o CSC.o Matrix.o Vector.o
 bench.o		: bench.cpp AOS.hpp CSC.hpp COO.hpp Vector.hpp
 csrbench.o		: csrbench.cpp CSR.hpp Vector.hpp
 densebench.o		: densebench.cpp Matrix.hpp
-main.o		: main.cpp Matrix.hpp
+main.o			: main.cpp Matrix.hpp
 sparsebench.o		: sparsebench.cpp COO.hpp Vector.hpp
 mpi2norm_timer.o	: mpi/mpi2norm_timer.cpp Vector.hpp
 mpi2norm_driver.o	: mpi/mpi2norm_driver.cpp Vector.hpp
@@ -128,4 +128,4 @@ CSR.o			: CSR.hpp Vector.hpp
 Matrix.o		: Matrix.hpp Vector.hpp
 Vector.o		: Vector.hpp
 Laplacian.o		: Laplacian.hpp
-Grid.o		: Grid.hpp
+Grid.o			: Grid.hpp
