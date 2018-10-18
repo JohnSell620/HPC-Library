@@ -1,7 +1,16 @@
 ## Overview
-This library consists mainly of various matrix classes with computational methods like QR factorization, matrix-vector and matrix-matrix multiplication, etc. Testing MPI and GPU computations is done using CUDA, NVIDIA Container Runtime, and Docker Compose.
+This library consists mainly of various matrix classes with computational methods like QR factorization, matrix-vector and matrix-matrix multiplication, etc. Testing MPI and GPU computations is done using CUDA, MPICH, and Docker Compose.
 
-Credit to Nikyle Nguyen for the cluster implementation on Alpine Linux using Docker Compose. See project at https://github.com/NLKNguyen/alpine-mpich.
+Credit to Nikyle Nguyen for the cluster implementation on Alpine Linux using Docker Compose. See [his project here](https://github.com/NLKNguyen/alpine-mpich).
+
+## Using Docker Images
+Both Docker and Docker Compose must be installed on the host machine. Then do the following:
+```bash
+$ clone https://github.com/JohnSell620/HPC-Library.git
+$ cd HPC-Library
+$ sh ./cluster.sh up [size=10]
+```
+This will pull the Docker images `jhnns/ubuntu-cuda-mpich:latest` and `jhnns/ubuntu-cuda-mpich:onbuild` from [Docker Hub](https://hub.docker.com/).
 
 ## Building Without Docker Containers
 ### Install OpenMPI
@@ -37,9 +46,6 @@ $ c++ -std=c++11 -I ./inc -L ./lib -static ./tests/main.cpp -lHPCLibrary -o ./ex
 Now run `$ ./exe/libHPCLibraryClient` to see the output of `main.cpp`. To build the benchmarking tests, just run `$ make`.
 
 Run `$ make precomp_headers` to pre-compile the .hpp files, and include these to optimize programs.
-
-### Pulling Docker Images and Using Docker Compose Cluster
-The images jsellers/gpu-mpi:latest and jsellers/gpu-mpi:onbuild can be found at https://hub.docker.com/ (imminent).
 
 ## Usage
 Try these commands from the HPC-Library/HPCLibrary directory after running `make all`.

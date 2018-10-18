@@ -1,10 +1,10 @@
-FROM jsellers/gpu-mpi:onbuild
+FROM jhnns/ubuntu-cuda-mpich:onbuild
 
 USER root
 
 #### Install Google Test ####
-RUN apt-get install -y libgtest-dev && \
-    apt-get install -y cmake && \
+RUN apt-get update && apt-get install -y libgtest-dev cmake && \
+    rm -rf /var/lib/apt/lists/* && \
     cd /usr/src/gtest && \
     cmake CMakeLists.txt && \
     make && \
@@ -12,9 +12,9 @@ RUN apt-get install -y libgtest-dev && \
 
 # Copy the content of `HPCLibrary` directory in the host machine to
 # the current working directory in this Docker image
-COPY HPCcode/ .
+COPY HPCLibrary .
 
 # Build HPC code
-RUN make
+RUN rm -rf dev graphs && make
 
 USER ${USER}

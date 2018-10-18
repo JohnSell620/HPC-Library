@@ -3,6 +3,7 @@ onbuild
 ssh
 swarm.sh
 remove_image.sh
+*.dev
 !HPCLibrary
 HPCLibrary/obj
 HPCLibrary/exe
