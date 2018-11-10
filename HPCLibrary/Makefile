@@ -107,7 +107,7 @@ mpi2norm_driver	: mpi2norm_driver.o Vector.o
 mpi2norm_timer		: mpi2norm_timer.o Vector.o
 mpiHeatEq2D-CG		: mpiHeatEq2D-CG.o Grid.o Laplacian.o
 mpiHeatEq2D-IR		: mpiHeatEq2D-IR.o Grid.o Laplacian.o
-mpi_hello_world		: mpi_hello_world.o
+mpi_hello_world	: mpi_hello_world.o
 gpu_densebench		: gpu_densebench.o Matrix.o Vector.o
 unittests		: unittests.o CSC.o Matrix.o Vector.o
 

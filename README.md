@@ -13,11 +13,12 @@ $ sh ./cluster.sh up [size=10]
 This will pull the Docker images `jhnns/ubuntu-cuda-mpich:latest` and `jhnns/ubuntu-cuda-mpich:onbuild` from [Docker Hub](https://hub.docker.com/).
 
 ## Building Without Docker Containers
-### Install OpenMPI
-Some benchmarking programs depend on OpenMPI, but it's not required for most programs. Skip steps 1 through 3 if using these is not desired.
-1. Download OpenMPI (recommend extracting contents in /usr/local).
+### Install Open MPI
+Some benchmarking programs depend on Open MPI, but it's not required for most programs. Skip steps 1 through 3 if using these is not desired.
+1. Download Open MPI (recommend extracting contents in /usr/local).
 2. Run the following commands.
 ```bash
+$ wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.3.tar.gz
 $ tar -xzvf openmpi-x.x.x.tar.gz
 $ cd openmpi-x.x.x
 $ sudo ./configure --prefix=$HOME/openmpi --enable-mpi-cxx

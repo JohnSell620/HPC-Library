@@ -201,7 +201,7 @@ list ()
 exec_on_mpi_master_container ()
 {
     # shellcheck disable=SC2046
-    docker exec -it -u mpi $(docker-compose ps | grep 'hpclibrary_master_1'| awk '{print $1}') "$@"
+    docker exec -it -u mpi $(docker-compose ps | grep 'master'| awk '{print $1}') "$@"
 }
 
 prompt_ready ()
@@ -220,9 +220,10 @@ show_instruction ()
     echo '                 \    \         __/               '
     echo '                  \____\_______/                  '
     echo '                                                  '
-    echo '                 Alpine MPICH Cluster             '
+    echo '               Ubuntu GPU-MPICH Cluster           '
     echo ''
-    echo ' More info: https://github.com/NLKNguyen/alpine-mpich'
+    echo ' More info: https://github.com/NLKNguyen/alpine-mpich and'
+    echo '            https://github.com/JohnSell620/HPC-Library'
     echo ''
     echo '=============================================================='
     echo ''
@@ -235,6 +236,8 @@ show_instruction ()
     echo "     Or using SSH with keys through exposed port:"
     echo "     $ ssh -o \"StrictHostKeyChecking no\" -i ssh/id_rsa -p $SSH_PORT mpi@localhost"
     echo '       where [localhost] could be changed to the host IP of master node'
+    echo '     E.g.,'
+    echo "     ssh -o \"StrictHostKeyChecking no\" -i ssh/id_rsa -p 22 mpi@$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' hpclibrary_master_1)"
     echo ""
     echo "  2. Execute MPI programs inside master node, for example:"
     echo "     $ mpirun hostname"
