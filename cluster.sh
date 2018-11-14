@@ -46,7 +46,7 @@ SIZE=4
 #############################################
 usage ()
 {
-    echo " Alpine MPICH Cluster (for Docker Compose on single Docker host)"
+    echo " Ubuntu-CUDA-MPICH Cluster (for Docker Compose on single Docker host)"
     echo ""
     echo " USAGE: ./cluster.sh [COMMAND] [OPTIONS]"
     echo ""
@@ -220,10 +220,11 @@ show_instruction ()
     echo '                 \    \         __/               '
     echo '                  \____\_______/                  '
     echo '                                                  '
-    echo '               Ubuntu GPU-MPICH Cluster           '
+    echo '               Ubuntu-CUDA-MPICH Cluster           '
     echo ''
-    echo ' More info: https://github.com/NLKNguyen/alpine-mpich and'
-    echo '            https://github.com/JohnSell620/HPC-Library'
+    echo ' More info: https://github.com/JohnSell620/HPC-Library'
+    echo ' Original cluster set up adopted from Nikyle Nguyen.'
+    echo ' Info at https://github.com/NLKNguyen/alpine-mpich'
     echo ''
     echo '=============================================================='
     echo ''

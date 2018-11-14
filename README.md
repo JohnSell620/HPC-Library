@@ -1,5 +1,5 @@
 ## Overview
-This library consists mainly of various matrix classes with computational methods like QR factorization, matrix-vector and matrix-matrix multiplication, etc. Testing MPI and GPU computations is done using CUDA, MPICH, and Docker Compose.
+This library consists mainly of various matrix classes with computational methods like QR factorization, matrix-vector and matrix-matrix multiplication, etc. Testing of MPI and GPU computations is done using Nvidia CUDA, MPICH, and Docker Compose.
 
 Credit to Nikyle Nguyen for the cluster implementation on Alpine Linux using Docker Compose. See [his project here](https://github.com/NLKNguyen/alpine-mpich).
 
@@ -11,6 +11,11 @@ $ cd HPC-Library
 $ sh ./cluster.sh up [size=10]
 ```
 This will pull the Docker images `jhnns/ubuntu-cuda-mpich:latest` and `jhnns/ubuntu-cuda-mpich:onbuild` from [Docker Hub](https://hub.docker.com/).
+
+Use the following command to ssh into the master node:
+```bash
+$ ssh -o "StrictHostKeyChecking no" -i ssh/id_rsa -p 22 mpi@$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' hpclibrary_master_1)
+```
 
 ## Building Without Docker Containers
 ### Install Open MPI
@@ -51,9 +56,10 @@ Run `$ make precomp_headers` to pre-compile the .hpp files, and include these to
 ## Usage
 Try these commands from the HPC-Library/HPCLibrary directory after running `make all`.
 ```bash
-$ ./exe/bench
-$ ./exe/csrbench
-$ ./exe/sparsebench
+$ export PATH=/path/to/HPC-Library/HPCLibrary/exe:$PATH
+$ bench
+$ csrbench
+$ sparsebench
 ```
 
 ## Benchmarking Results
@@ -68,4 +74,3 @@ or multiplication.
 ## TODO
 1. Fix gpu_densebench.cu timing issue.
 2. Correct Matrix::qr() factorization.
-3. Correct issues with MPI on Docker Compose.
