@@ -6,9 +6,9 @@ Credit to Nikyle Nguyen for the cluster implementation on Alpine Linux using Doc
 ## Using Docker Images
 Both Docker and Docker Compose must be installed on the host machine. Then do the following:
 ```bash
-$ clone https://github.com/JohnSell620/HPC-Library.git
+$ git clone https://github.com/JohnSell620/HPC-Library.git
 $ cd HPC-Library
-$ sh ./cluster.sh up [size=10]
+$ ./cluster.sh up [size=10]
 ```
 This will pull the Docker images `jhnns/ubuntu-cuda-mpich:latest` and `jhnns/ubuntu-cuda-mpich:onbuild` from [Docker Hub](https://hub.docker.com/r/jhnns/ubuntu-cuda-mpich/).
 
