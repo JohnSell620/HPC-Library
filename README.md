@@ -10,7 +10,7 @@ $ clone https://github.com/JohnSell620/HPC-Library.git
 $ cd HPC-Library
 $ sh ./cluster.sh up [size=10]
 ```
-This will pull the Docker images `jhnns/ubuntu-cuda-mpich:latest` and `jhnns/ubuntu-cuda-mpich:onbuild` from [Docker Hub](https://hub.docker.com/).
+This will pull the Docker images `jhnns/ubuntu-cuda-mpich:latest` and `jhnns/ubuntu-cuda-mpich:onbuild` from [Docker Hub](https://hub.docker.com/r/jhnns/ubuntu-cuda-mpich/).
 
 Use the following command to ssh into the master node:
 ```bash
