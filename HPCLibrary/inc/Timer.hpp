@@ -13,9 +13,15 @@ class Timer {
 public:
   Timer() : startTime(), stopTime() {}
 
-  std::chrono::system_clock::time_point start()  { return (startTime = std::chrono::system_clock::now()); }
-  std::chrono::system_clock::time_point stop()   { return (stopTime  = std::chrono::system_clock::now()); }
-  double elapsed() { return std::chrono::duration_cast<std::chrono::milliseconds>(stopTime-startTime).count(); }
+  std::chrono::system_clock::time_point start() {
+    return (startTime = std::chrono::system_clock::now());
+  }
+  std::chrono::system_clock::time_point stop() {
+    return (stopTime  = std::chrono::system_clock::now());
+  }
+  double elapsed() {
+    return std::chrono::duration_cast<std::chrono::milliseconds>(stopTime-startTime).count();
+  }
 
 private:
 	std::chrono::time_point<std::chrono::system_clock> startTime, stopTime;

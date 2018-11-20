@@ -22,28 +22,28 @@ void CSCMatrix::readMatrix(std::string fileName) {
 
 	std::getline(inputFile, string_input);
 	if (string_input.compare("CSCMATRIX") != 0) {
-		std::cout << "Error: incorrect header. Correct header: CSCMATRIX" << std::endl;
+		std::cout << "Error: incorrect header. Correct header: CSCMATRIX\n";
 		std::exit(-2);
 	}
 
 	std::getline(inputFile, string_input);
 	jCols = std::stoi(string_input);
 	if (jCols <= 0) {
-		std::cout << "Error: columns <= 0?" << std::endl;
+		std::cout << "Error: columns <= 0?\n";
 		std::exit(-2);
 	}
 
 	std::getline(inputFile, string_input);
 	iRows = std::stoi(string_input);
 	if (iRows <= 0) {
-		std::cout << "Error: rows <= 0?" << std::endl;
+		std::cout << "Error: rows <= 0?\n";
 		std::exit(-2);
 	}
 
 	std::getline(inputFile, string_input);
 	nonzeros = std::stoi(string_input);
 	if (nonzeros < 0) {
-		std::cout << "Error: nonzeros < 0?" << std::endl;
+		std::cout << "Error: nonzeros < 0?\n";
 		std::exit(-2);
 	}
 
@@ -90,7 +90,7 @@ void CSCMatrix::readMatrix(std::string fileName) {
 
 	std::getline(inputFile, string_input);
 	if (string_input.compare("END") != 0) {
-		std::cout << "Error: incorrect trailer. Correct trailer: END" << std::endl;
+		std::cout << "Error: incorrect trailer. Correct trailer: END\n";
 		std::exit(-2);
 	}
 

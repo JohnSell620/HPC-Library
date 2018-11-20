@@ -170,14 +170,14 @@ Vector readVector(std::istream& inputStream) {
 
 	std::getline(inputStream, string_input);
 	if (string_input.compare("VECTOR") != 0) {
-		std::cout << "Error: incorrect header" << std::endl;
+		std::cout << "Error: incorrect header\n";
 		std::exit(-2);
 	}
 
 	std::getline(inputStream, string_input);
 	iRows = std::stoi(string_input);
 	if (iRows < 0) {
-		std:: cout << "Error: vector size < 0?" << std::endl;
+		std:: cout << "Error: vector size < 0?\n";
 		std::exit(-2);
 	}
 
@@ -193,7 +193,7 @@ Vector readVector(std::istream& inputStream) {
 	std::getline(inputStream, string_input);
 
 	if (string_input.compare("END") != 0) {
-		std::cout << "Error: incorrect trailer" << std::endl;
+		std::cout << "Error: incorrect trailer\n";
 		std::exit(-2);
 	}
 
@@ -210,31 +210,31 @@ Vector readVector(std::string fileName) {
 		return vector;
 	}
 	else {
-		std::cout << "Error: could not read file" << std::endl;
+		std::cout << "Error: could not read file\n";
 		std::exit(-3);
 	}
 }
 
 void writeVector(const Vector& x, std::ostream& os) {
-	os << "VECTOR" << std::endl;
+	os << "VECTOR\n";
 	os << x.numRows() << std::endl;
 
 	for (int i = 0; i < x.numRows(); ++i)
 		os << x(i) << std::endl;
 
-	os << "END" << std::endl;
+	os << "END\n";
 }
 
 void writeVector(const Vector& x, std::string file) {
 		std::ofstream ofs;
 		ofs.open (file, std::ios::out);
 
-		ofs << "VECTOR" << std::endl;
+		ofs << "VECTOR\n";
 		ofs << x.numRows() << std::endl;
 		for (int i = 0; i < x.numRows(); ++i)
 			ofs << x(i) << std::endl;
 
-		ofs << "END" << std::endl;
+		ofs << "END\n";
 
 		ofs.close();
 }

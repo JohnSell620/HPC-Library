@@ -20,7 +20,7 @@ class Vector {
   typedef std::vector<double>::size_type size_type;
 
 public:
-  explicit Vector(size_type M) : iRows(M), arrayData(iRows      ) {}
+  explicit Vector(size_type M) : iRows(M), arrayData(iRows) {}
   explicit Vector(size_type M, double init) : iRows(M), arrayData(iRows, init) {}
 
   ~Vector() {}

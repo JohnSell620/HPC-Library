@@ -46,7 +46,9 @@ public:
 				ptr.push_back(cum + ptr[j]);
 				++j;
 			}
-			else if (colIndices[i-1] != colIndices[i] && colIndices[i] != colIndices[i+1]) {
+			else if (colIndices[i-1] != colIndices[i] &&
+               colIndices[i] != colIndices[i+1]) 
+      {
 				cum = 1;
 				ptr.push_back(cum + ptr[j]);
 				++i;
