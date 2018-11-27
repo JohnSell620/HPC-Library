@@ -11,6 +11,10 @@
 #include <string>
 #include "Vector.hpp"
 
+// #include <type_traits> /* enable_if, conjuction */
+// template<class Head, class... Tail>
+// using are_same = std::conjunction<std::is_same<Head, Tail>...>;
+
 
 class Matrix {
 public:
@@ -79,5 +83,9 @@ Matrix qr(const Matrix& A, Matrix& R);
 Matrix readMatrix(std::string fileName);
 void writeMatrix(const Matrix& A, std::string file);
 void writeMatrix(const Matrix& A, std::ostream& os);
+
+
+// template<class Head, class... Tail, class = std::enable_if_t<are_same<Head, Tail...>::value, void>>
+void chainMultiply(Matrix&... A_i);
 
 #endif // MATRIX_HPP

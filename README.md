@@ -1,7 +1,7 @@
 ## Overview
 This library consists mainly of various matrix classes with computational methods like QR factorization, matrix-vector and matrix-matrix multiplication, etc. Testing of MPI and GPU computations is done using Nvidia CUDA, MPICH, and Docker Compose.
 
-Credit to Nikyle Nguyen for the cluster implementation on Alpine Linux using Docker Compose. See [his project here](https://github.com/NLKNguyen/alpine-mpich).
+Credit to Nikyle Nguyen for a cluster implementation model on Alpine Linux using Docker Compose. See [his project here](https://github.com/NLKNguyen/alpine-mpich).
 
 ## Using Docker Images
 Both Docker and Docker Compose must be installed on the host machine. Then do the following:
@@ -18,17 +18,17 @@ $ ssh -o "StrictHostKeyChecking no" -i ssh/id_rsa -p 22 mpi@$(docker inspect -f 
 ```
 
 ## Building Without Docker Containers
-### Install Open MPI
+### Install MPICH
 Some benchmarking programs depend on Open MPI, but it's not required for most programs. Skip steps 1 through 3 if using these is not desired.
-1. Download Open MPI (recommend extracting contents in /usr/local).
-2. Run the following commands.
+1. Download Open MPI (extracting contents in `/usr/local` recommended).
+2. Run the following command (which may require `sudo`).
 ```bash
-$ wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.3.tar.gz
-$ tar -xzvf openmpi-x.x.x.tar.gz
-$ cd openmpi-x.x.x
-$ sudo ./configure --prefix=$HOME/openmpi --enable-mpi-cxx
-$ sudo make all
-$ sudo make install
+$ wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.3.tar.gz && \
+     tar -xzvf openmpi-* && \
+     cd openmpi-* && \
+     ./configure --prefix=$HOME/openmpi --enable-mpi-cxx && \
+     make all && \
+     make install
 ```
 3. In ~/.bashrc file, add the following lines.
 ```
@@ -36,6 +36,8 @@ export PATH=/path/to/openmpi/bin${PATH:+:${PATH}}
 export LD_LIBRARY_PATH=/path/to/openmpi/lib\${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 ```
 
+### Install CUDA
+Installation instruction at [NVIDIA's website](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html).
 ### Building and Using the library
 Run the following commands to build the HPCLibrary library.
 ```bash
@@ -74,3 +76,4 @@ or multiplication.
 ## TODO
 1. Fix gpu_densebench.cu timing issue.
 2. Correct Matrix::qr() factorization.
+3. Implement chainMultiply(Matrix&... A) using DP algorithm.

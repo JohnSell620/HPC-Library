@@ -4,12 +4,13 @@
  * @author Johnny Sellers
  * @version 0.1 05/10/2017
  */
-#include <cassert>
 #include <cmath>
 #include <random>
-#include <algorithm>
-#include <iostream>
+#include <cassert>
+#include <climits>
 #include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <functional>
 #include "Matrix.hpp"
 
@@ -512,4 +513,40 @@ void writeMatrix(const Matrix& A, std::ostream& os) {
 		  os << A(i, j) << std::endl;
 
 	os << "END\n";
+}
+
+void printOptParens(int* s, int i, int j, std::string& str) {
+  if (i == j) {
+    str += "A_";
+    str += std::string(i);
+  }
+  else {
+    str += "(";
+    printOptParens(s, i, s[i][j]);
+    printOptParens(s, s[i][j]+1, j);
+    str += ")";
+  }
+}
+
+// template<class Head, class... Tail, class = std::enable_if_t<are_same<Head, Tail...>::value, void>>
+void unpack(Matrix&... A) {}
+void chainMultiply(Matrix&... A) {
+  auto n = sizeof...(A);
+  std::vector<Matrix&> v;
+
+  int m[][n] = { };
+  int s[][n];
+  for (int l = 1; l < n; ++l) {
+    for (int i = 0, j; i < n - l + 1; ++i) {
+      j = i + l - 1;
+      m[i][j] = INT_MAX;
+      for (int k = i, q; k < j - 1; ++i) {
+        q = m[i][k] + m[k+1][j] + A[i].rows() * A[k].rows() * A[j].rows();
+        if (q < m[i][j]) {
+          m[i][j] = q;
+          s[i][j] = k;
+        }
+      }
+    }
+  }
 }
