@@ -421,7 +421,7 @@ Matrix qr(const Matrix& A, Matrix& R) {
 
   for (int k = 0; k < A.numCols(); ++k) {
     for (int i = 0; i < A.numRows(); ++i)
-      x(i) = A(i,k);
+      x.setValue(i, A(i,k));
 
     if (x(0) < 0) e_1(0) = -twoNorm(x);
     else if (x(0) >= 0) e_1(0) = twoNorm(x);
@@ -429,10 +429,10 @@ Matrix qr(const Matrix& A, Matrix& R) {
     norm_v = twoNorm(v);
 
     for (int i = 0; i < v.numRows(); ++i)
-      v(i) = v(i) / norm_v;
+      v.setValue(i, v(i)/norm_v);
 
     for (int j = k; j < R.numRows(); ++j)
-      R(k, j) = R(k, j) - 2*v(j) * v(j) * R(k, j);
+      R.setValue(k, j, R(k, j) - 2*v(j) * v(j) * R(k, j));
   }
   return R;
 }
@@ -515,38 +515,38 @@ void writeMatrix(const Matrix& A, std::ostream& os) {
 	os << "END\n";
 }
 
-void printOptParens(int* s, int i, int j, std::string& str) {
-  if (i == j) {
-    str += "A_";
-    str += std::string(i);
-  }
-  else {
-    str += "(";
-    printOptParens(s, i, s[i][j]);
-    printOptParens(s, s[i][j]+1, j);
-    str += ")";
-  }
-}
+// void printOptParens(int* s, int i, int j, std::string& str) {
+//   if (i == j) {
+//     str += "A_";
+//     str += std::string(i);
+//   }
+//   else {
+//     str += "(";
+//     printOptParens(s, i, s[i][j]);
+//     printOptParens(s, s[i][j]+1, j);
+//     str += ")";
+//   }
+// }
 
 // template<class Head, class... Tail, class = std::enable_if_t<are_same<Head, Tail...>::value, void>>
-void unpack(Matrix&... A) {}
-void chainMultiply(Matrix&... A) {
-  auto n = sizeof...(A);
-  std::vector<Matrix&> v;
-
-  int m[][n] = { };
-  int s[][n];
-  for (int l = 1; l < n; ++l) {
-    for (int i = 0, j; i < n - l + 1; ++i) {
-      j = i + l - 1;
-      m[i][j] = INT_MAX;
-      for (int k = i, q; k < j - 1; ++i) {
-        q = m[i][k] + m[k+1][j] + A[i].rows() * A[k].rows() * A[j].rows();
-        if (q < m[i][j]) {
-          m[i][j] = q;
-          s[i][j] = k;
-        }
-      }
-    }
-  }
-}
+// void unpack(Matrix&... A) {}
+// void chainMultiply(Matrix&... A) {
+//   auto n = sizeof...(A);
+//   std::vector<Matrix&> v;
+//
+//   int m[][n] = { };
+//   int s[][n];
+//   for (int l = 1; l < n; ++l) {
+//     for (int i = 0, j; i < n - l + 1; ++i) {
+//       j = i + l - 1;
+//       m[i][j] = INT_MAX;
+//       for (int k = i, q; k < j - 1; ++i) {
+//         q = m[i][k] + m[k+1][j] + A[i].rows() * A[k].rows() * A[j].rows();
+//         if (q < m[i][j]) {
+//           m[i][j] = q;
+//           s[i][j] = k;
+//         }
+//       }
+//     }
+//   }
+// }

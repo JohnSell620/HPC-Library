@@ -14,11 +14,17 @@ This will pull the Docker images `jhnns/ubuntu-cuda-mpich:latest` and `jhnns/ubu
 
 Use the following command to ssh into the master node:
 ```bash
-$ ssh -o "StrictHostKeyChecking no" -i ssh/id_rsa -p 22 mpi@$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' hpclibrary_master_1)
+$ ssh -o "StrictHostKeyChecking no" -i ssh/id_rsa -p 22 mpi@$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' hpc-library_master_1)
+```
+
+To exit master node and shutdown cluster:
+```bash
+$ exit
+$ ./cluster down
 ```
 
 ## Building Without Docker Containers
-### Install MPICH
+### Install OpenMPI
 Some benchmarking programs depend on Open MPI, but it's not required for most programs. Skip steps 1 through 3 if using these is not desired.
 1. Download Open MPI (extracting contents in `/usr/local` recommended).
 2. Run the following command (which may require `sudo`).
@@ -75,5 +81,4 @@ or multiplication.
 
 ## TODO
 1. Fix gpu_densebench.cu timing issue.
-2. Correct Matrix::qr() factorization.
-3. Implement chainMultiply(Matrix&... A) using DP algorithm.
+2. Add examples (e.g., 2-D Heat Eq.).

@@ -42,7 +42,7 @@ void matvec_CSC(const CSCMatrix& A, const Vector& x, Vector& y) {
 int main(int argc, char *argv[]) {
 
 	if (argc != 2) {
-		cout << "Usage: " << argv[0] << " matrix_type (\"COOMatrix\", \"AOSMatrix\", \"CSCMatrix\")" << endl;
+		cout << "Usage: " << argv[0] << " [matrix_type] (\"COOMatrix\", \"AOSMatrix\", \"CSCMatrix\")" << endl;
 		return -1;
 	}
 

@@ -33,6 +33,10 @@ public:
   int numCols() const { return jCols; }
   int size() const { return arrayData.size(); }
 
+	void setValue(int i, int j, double value) {
+		arrayData[i*jCols + j] = value;
+	}
+
 	void setValue(int k, double value) {
 		arrayData[k] = value;
 	}
@@ -86,6 +90,6 @@ void writeMatrix(const Matrix& A, std::ostream& os);
 
 
 // template<class Head, class... Tail, class = std::enable_if_t<are_same<Head, Tail...>::value, void>>
-void chainMultiply(Matrix&... A_i);
+// void chainMultiply(Matrix&... A_i);
 
 #endif // MATRIX_HPP

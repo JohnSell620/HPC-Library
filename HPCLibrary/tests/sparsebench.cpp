@@ -26,7 +26,7 @@ void matvec_sparse(const COOMatrix& A, const Vector& x, Vector& y) {
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
-		cout << "Usage: " << argv[0] << " matrix_type" << endl;
+		cout << "Usage: " << argv[0] << " [matrix_type]" << endl;
     runBenchmark_sparse(matvec_sparse, 32L*8192L);
 		// return -1;
 	}
