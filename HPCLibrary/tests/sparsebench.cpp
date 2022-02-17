@@ -27,12 +27,12 @@ void matvec_sparse(const COOMatrix& A, const Vector& x, Vector& y) {
 int main(int argc, char *argv[]) {
   if (argc != 2) {
 		cout << "Usage: " << argv[0] << " [matrix_type]" << endl;
-    runBenchmark_sparse(matvec_sparse, 32L*8192L);
-		// return -1;
+    runBenchmark_sparse(matvec_sparse, 32L*4096L);
+		return -1;
 	}
 
   if (string(argv[1]) == "sparse")
-    runBenchmark_sparse(matvec_sparse, 32L*8192L);
+    runBenchmark_sparse(matvec_sparse, 32L*4096L);
   else return -2;
 
   return 0;

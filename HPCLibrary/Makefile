@@ -27,7 +27,7 @@ EXE_PATH	= exe
 GCH_PATH	= gch
 UGT_PATH 	= tests/unittests
 
-INCLUDES	= -I ./$(INC_PATH)
+INCLUDES	= -I $(INC_PATH)
 
 VPATH 		:= src tests obj inc
 HEADERS		= $(wildcard inc/*.hpp)
@@ -63,8 +63,12 @@ classes 	 : $(CLASSES)
 
 precomp_headers : $(PCHS)
 
+obj		 : $(OBJECTS)
+
+exe		 : $(EXECS)
+
 $(EXECS)	 :
-		  $(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o  $(EXE_PATH)/$@
+		  $(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
 
 $(MPI_EXECS)	 :
 		  $(MPI) $(MPIFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
@@ -101,7 +105,7 @@ clean:
 bench			: bench.o AOS.o COO.o CSC.o Vector.o
 csrbench		: csrbench.o CSR.o Vector.o
 densebench		: densebench.o Matrix.o Vector.o
-main			: main.o Matrix.o Vector.o
+main			: main.o  Matrix.o
 sparsebench		: sparsebench.o COO.o Vector.o
 mpi2norm_driver		: mpi2norm_driver.o Vector.o
 mpi2norm_timer		: mpi2norm_timer.o Vector.o
@@ -113,7 +117,7 @@ unittests		: unittests.o CSC.o Matrix.o Vector.o
 
 bench.o			: bench.cpp AOS.hpp CSC.hpp COO.hpp Vector.hpp
 csrbench.o		: csrbench.cpp CSR.hpp Vector.hpp
-densebench.o		: densebench.cpp Matrix.hpp
+densebench.o		: densebench.cpp Matrix.hpp Vector.hpp
 main.o			: main.cpp Matrix.hpp
 sparsebench.o		: sparsebench.cpp COO.hpp Vector.hpp
 mpi2norm_timer.o	: mpi/mpi2norm_timer.cpp Vector.hpp

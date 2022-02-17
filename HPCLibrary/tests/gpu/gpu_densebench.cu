@@ -14,20 +14,20 @@
 
 #define BLOCK_SIZE 16
 
-class GPUMatrix: public Matrix {
+class GPUMatrix: public Matrix<float> {
 public:
-  GPUMatrix(int M, int N):Matrix(M,N) {}
-  GPUMatrix():Matrix() {}
+  GPUMatrix(int M, int N):Matrix<float>(M,N) {}
+  GPUMatrix():Matrix<float>() {}
 
-  __host__ __device__ std::vector<double>& elements() {
+  __host__ __device__ std::vector<float>& elements() {
     return arrayData;
   }
 };
 
 // Without shared memory
 __global__
-void MatMulKernel(double *A, double *B, double *C, int Awidth, int Bwidth) {
-  double Cvalue = 0;
+void MatMulKernel(float *A, float *B, float *C, int Awidth, int Bwidth) {
+  float Cvalue = 0;
   int row = blockIdx.y * blockDim.y + threadIdx.y;
   int col = blockIdx.x * blockDim.x + threadIdx.x;
   for (int k = 0; k < Awidth; ++k)
@@ -38,26 +38,26 @@ void MatMulKernel(double *A, double *B, double *C, int Awidth, int Bwidth) {
 double runBench(int M, int N, int K) {
   // Host copies of GPUMatrix A, B, C
   GPUMatrix h_A(M, K), h_B(K, N), h_C(M, N);
-  randomizeMatrix(h_A);
-  randomizeMatrix(h_B);
-  randomizeMatrix(h_C);
+  h_A.randomizeMatrix();
+  h_B.randomizeMatrix();
+  h_C.randomizeMatrix();
 
   // Copy host matrix elements to arrays for kernel
-  double h_Aarr[M*K], h_Barr[K*N], h_Carr[M*N];
+  float h_Aarr[M*K], h_Barr[K*N], h_Carr[M*N];
   std::copy(h_A.elements().begin(), h_A.elements().end(), h_Aarr);
   std::copy(h_B.elements().begin(), h_B.elements().end(), h_Barr);
 
   // Allocate space for device copies of A, B elements
-  double *d_Aarr;
-  size_t size = h_A.numRows()*h_A.numCols()*sizeof(double);
+  float *d_Aarr;
+  size_t size = h_A.numRows()*h_A.numCols()*sizeof(float);
   cudaMalloc((void **)&d_Aarr, size);
   cudaMemcpy(d_Aarr, h_Aarr, size, cudaMemcpyHostToDevice);
-  double *d_Barr;
-  size = K * N * sizeof(double);
+  float *d_Barr;
+  size = K * N * sizeof(float);
   cudaMalloc((void **)&d_Barr, size);
   cudaMemcpy(d_Barr, h_Barr, size, cudaMemcpyHostToDevice);
-  double *d_Carr;
-  size = M * N * sizeof(double);
+  float *d_Carr;
+  size = M * N * sizeof(float);
   cudaMalloc((void **)&d_Carr, size);
 
   // Block and grid dimensions for kernel
@@ -80,8 +80,8 @@ double runBench(int M, int N, int K) {
   std::copy(h_Carr, h_Carr + size, std::back_inserter(h_C.elements()));
 
   // Test print 1-Norm of C
-  Matrix& C = h_C;
-  std::cout << "1-Norm of C: " << oneNorm(C) << std::endl;
+  Matrix<float>& C = h_C;
+  std::cout << "1-Norm of C: " << C.norm('1') << std::endl;
 
   // Cleanup
   cudaFree(d_Aarr);

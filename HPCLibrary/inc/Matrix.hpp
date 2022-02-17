@@ -1,95 +1,84 @@
-/*
- * Matrix.hpp
- * Description: Matrix class.
- * @author Johnny Sellers
- * @version 0.1 05/10/2017
- */
 #if !defined(MATRIX_HPP)
 #define MATRIX_HPP
 
-#include <vector>
+#include <initializer_list>
+#include <functional>
+#include <algorithm>
+#include <iostream>
+#include <cassert>
+#include <climits>
+#include <fstream>
+#include <random>
 #include <string>
+#include <vector>
+#include <cmath>
+using std::vector;
+
 #include "Vector.hpp"
 
-// #include <type_traits> /* enable_if, conjuction */
-// template<class Head, class... Tail>
-// using are_same = std::conjunction<std::is_same<Head, Tail>...>;
-
-
+template<typename T>
 class Matrix {
+protected:
+  int iRows, jCols;
+  vector<T> arrayData;
+
 public:
   Matrix(int M, int N) : iRows(M), jCols(N), arrayData(iRows*jCols) {}
   Matrix() { iRows = 0; jCols = 0; }
 
   ~Matrix() {}
 
-  double &operator()(int i, int j) { return arrayData[i*jCols + j]; }
-
-  const double &operator()(int i, int j) const {
-    return arrayData[i*jCols + j];
-  }
-
   int numRows() const { return iRows; }
   int numCols() const { return jCols; }
   int size() const { return arrayData.size(); }
 
-	void setValue(int i, int j, double value) {
-		arrayData[i*jCols + j] = value;
-	}
+  T &operator()(int i, int j);
+  const T &operator()(int i, int j) const;
 
-	void setValue(int k, double value) {
-		arrayData[k] = value;
-	}
+  void setValue(int i, int j, T value);
+  void setValue(int k, T value);
 
-  void matvec(const Vector& x, Vector& y) {
-		for (int i = 0; i < iRows; ++i) {
-			double t0 = 0; double t1 = 0;
-			for (int j = 0; j < jCols; ++j) {
-				t0 += arrayData[i*jCols + j] * x(j);
-				t1 += arrayData[(i+1)*jCols + j] * x(j);
-			}
-			y(i) = t0;
-			y(i+1) = t1;
-		}
-	}
+  Matrix operator*(const Matrix& B);
+  std::vector<T> operator*(const vector<T>& x);
+  Matrix operator+(const Matrix& B);
+  Matrix operator-(const Matrix& B);
+  void operator==(const Matrix& B);
+  bool isEqual(const Matrix& B);
+  Vector matvec(const Vector& x);
 
-  // void operator=(const Matrix& A);
+  Matrix partition(int start_row, int end_row, int start_col, int end_col) const;
+  static Matrix combine(vector<vector<Matrix>>& matrices);
+  static Matrix squareMultiply(const Matrix& A, const Matrix& B);
+  static Matrix strassenMultiply(const Matrix& A, const Matrix& B);
+  double norm(char type);
+  Matrix outerProduct(const vector<T>& x, const vector<T>& y);
+  vector<Matrix> qr();      // Modified Gram-Schmidt QR Factorization
+  Matrix qrHouseholder();   // Householder QR Factorization
 
-protected:
-  int iRows, jCols;
-  std::vector<double> arrayData;
+  static Matrix chainMultiply(std::initializer_list<Matrix> matrices);
+  static vector<vector<int>> matrixChainOrder(vector<int>& p);
+  static Matrix chainMultiply(
+    vector<Matrix>& matrices,
+    vector<vector<int>>& s,
+    int i,
+    int j);
+  static void printOptimalParens(vector<vector<int>>& s, int i, int j);
+
+  void randomizeMatrix();
+  void zeroizeMatrix();
+  void overwriteMatrix(std::string fileName);
+  static Matrix readMatrix(std::string fileName);
+  void writeMatrix(std::string file);
+  void writeMatrix(std::ostream& os);
+  void prettyPrint(std::string file);
+  void prettyPrint(std::ostream& os);
+
+private:
+  double twoNorm();
+  double oneNorm();
+  double infinityNorm();
+  double norm(const vector<T>& v);
+
 };
-
-
-Matrix operator*(const Matrix& A, const Matrix &B);
-Matrix operator+(const Matrix& A, const Matrix &B);
-Matrix operator-(const Matrix& A, const Matrix &B);
-void multiply(const Matrix& A, const Matrix &B, Matrix& C);
-void hoistedMultiply(const Matrix& A, const Matrix &B, Matrix& C);
-void tiledMultiply2x2(const Matrix& A, const Matrix&B, Matrix&C);
-void hoistedTiledMultiply2x2(const Matrix& A, const Matrix&B, Matrix&C);
-void blockedTiledMultiply2x2(const Matrix& A, const Matrix&B, Matrix&C);
-void tiledMultiply2x4(const Matrix& A, const Matrix&B, Matrix&C);
-void tiledMultiply4x2(const Matrix& A, const Matrix&B, Matrix&C);
-void tiledMultiply4x4(const Matrix& A, const Matrix&B, Matrix&C);
-void copyBlockedTiledMultiply2x2(const Matrix& A, const Matrix&B, Matrix&C);
-void hoistedBlockedTiledMultiply2x2(const Matrix& A, const Matrix&B, Matrix&C);
-void hoistedCopyBlockedTiledMultiply2x2(const Matrix& A, const Matrix&B, Matrix&C);
-void hoistedCopyBlockedTiledMultiply4x4(const Matrix& A, const Matrix&B, Matrix&C);
-double oneNorm(const Matrix& A);
-double infinityNorm(const Matrix& A);
-double frobeniusNorm(const Matrix& A);
-void zeroizeMatrix(Matrix& C);
-void randomizeMatrix(Matrix &A);
-void matvec(const Matrix& A, const Vector& x, Vector& y);
-Matrix outProd(const Vector&x, const Vector& y);
-Matrix qr(const Matrix& A, Matrix& R);
-Matrix readMatrix(std::string fileName);
-void writeMatrix(const Matrix& A, std::string file);
-void writeMatrix(const Matrix& A, std::ostream& os);
-
-
-// template<class Head, class... Tail, class = std::enable_if_t<are_same<Head, Tail...>::value, void>>
-// void chainMultiply(Matrix&... A_i);
 
 #endif // MATRIX_HPP
