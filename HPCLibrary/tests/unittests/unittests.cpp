@@ -91,6 +91,14 @@ TEST_F(MatrixTest, qrTest) {
   }
 }
 
+TEST_F(VectorTest, Vector2NormTest) {
+  Vector const& const_x = *x;
+  size_t partitions = 2;
+  double ansp = partitionedTwoNorm(const_x, 2);
+  double ansr = recursiveTwoNorm(const_x, 2);
+  ASSERT_EQ(1, 1);
+}
+
 TEST_F(CSCMatrixTest, MatvecWriteTest) {
   B->matvec(*x, *y);
   Vector c = A->matvec(*x);
@@ -106,14 +114,6 @@ TEST_F(CSCMatrixTest, MatvecWriteTest) {
                       std::istreambuf_iterator<char>()};
 
   ASSERT_STREQ(stext.c_str(), ftext.c_str());
-  ASSERT_EQ(1, 1);
-}
-
-TEST_F(VectorTest, Vector2NormTest) {
-  Vector const& const_x = *x;
-  size_t partitions = 2;
-  double ansp = partitionedTwoNorm(const_x, 2);
-  double ansr = recursiveTwoNorm(const_x, 2);
   ASSERT_EQ(1, 1);
 }
 
