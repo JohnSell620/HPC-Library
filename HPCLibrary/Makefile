@@ -115,11 +115,11 @@ mpi_hello_world		: mpi_hello_world.o
 gpu_densebench		: gpu_densebench.o Matrix.o Vector.o
 unittests		: unittests.o CSC.o Matrix.o Vector.o
 
-obj/bench.o			: bench.cpp AOS.hpp CSC.hpp COO.hpp Vector.hpp
+obj/bench.o		: bench.cpp AOS.hpp CSC.hpp COO.hpp Vector.hpp
 obj/csrbench.o		: csrbench.cpp CSR.hpp Vector.hpp
-obj/densebench.o		: densebench.cpp Matrix.hpp Vector.hpp
-obj/main.o			: main.cpp Matrix.hpp
-obj/sparsebench.o		: sparsebench.cpp COO.hpp Vector.hpp
+obj/densebench.o	: densebench.cpp Matrix.hpp Vector.hpp
+obj/main.o		: main.cpp Matrix.hpp
+obj/sparsebench.o	: sparsebench.cpp COO.hpp Vector.hpp
 obj/mpi2norm_timer.o	: mpi/mpi2norm_timer.cpp Vector.hpp
 obj/mpi2norm_driver.o	: mpi/mpi2norm_driver.cpp Vector.hpp
 obj/mpiHeatEq2D-CG.o	: mpi/mpiHeatEq2D-CG.cpp Grid.hpp Laplacian.hpp
@@ -127,11 +127,11 @@ obj/mpiHeatEq2D-IR.o	: mpi/mpiHeatEq2D-IR.cpp Laplacian.hpp
 obj/mpi_hello_world.o	: mpi/mpi_hello_world.cpp
 obj/gpu_densebench.o	: gpu/gpu_densebench.cu
 obj/unittests.o		: unittests/unittests.cpp Matrix.hpp Vector.hpp
-obj/AOS.o			: AOS.hpp Vector.hpp
-obj/COO.o			: COO.hpp Vector.hpp
-obj/CSC.o			: CSC.hpp Vector.hpp
-obj/CSR.o			: CSR.hpp Vector.hpp
+obj/AOS.o		: AOS.hpp Vector.hpp
+obj/COO.o		: COO.hpp Vector.hpp
+obj/CSC.o		: CSC.hpp Vector.hpp
+obj/CSR.o		: CSR.hpp Vector.hpp
 obj/Matrix.o		: Matrix.hpp Vector.hpp
 obj/Vector.o		: Vector.hpp
 obj/Laplacian.o		: Laplacian.hpp
-obj/Grid.o			: Grid.hpp
+obj/Grid.o		: Grid.hpp
