@@ -37,18 +37,14 @@ struct CSCMatrixTest : public testing::Test {
   CSCMatrix      * B = new CSCMatrix(16,16);
   Vector         * x = new Vector(16);
   Vector         * y = new Vector(16);
-  Matrix<double> * A = new Matrix<double>(16,16);
-  // Vector         * c = new Vector(16);
 
   void SetUp() {
     B->piscretize(4,4);
     randomize(*x);
     randomize(*y);
-    // randomize(*c);
   }
 
   void TearDown() {
-    delete A;
     delete B;
     delete x;
     delete y;
@@ -61,22 +57,22 @@ struct VectorTest : public testing::Test {
   void TearDown() { /* delete x; */ }
 };
 
-
 TEST_F(MatrixTest, writeMatrixTest) {
-    // Write A std::cout to string
-    std::stringstream buffer;
-    std::streambuf *old = std::cout.rdbuf(buffer.rdbuf());
-    A->writeMatrix(buffer);
-    std::string stext = buffer.str();
+  // Write A std::cout to string
+  std::stringstream buffer;
+  std::streambuf *old = std::cout.rdbuf(buffer.rdbuf());
+  A->writeMatrix(buffer);
+  std::string stext = buffer.str();
+  std::cout.rdbuf(old);
 
-    // Write A to file "test_write_A.txt" then to string
-    A->writeMatrix("exe/test_write_A.txt");
-    std::ifstream f {"exe/test_write_A.txt"};
-    std::string ftext {(std::istreambuf_iterator<char>(f)),
-                     std::istreambuf_iterator<char>()};
+  // Write A to file "test_write_A.txt" then to string
+  A->writeMatrix("exe/test_write_A.txt");
+  std::ifstream f {"exe/test_write_A.txt"};
+  std::string ftext {(std::istreambuf_iterator<char>(f)),
+                    std::istreambuf_iterator<char>()};
 
-    // Compare strings
-    ASSERT_STREQ(stext.c_str(), ftext.c_str());
+  // Compare strings
+  ASSERT_STREQ(stext.c_str(), ftext.c_str());
 }
 
 TEST_F(MatrixTest, qrTest) {
@@ -96,25 +92,23 @@ TEST_F(VectorTest, Vector2NormTest) {
   size_t partitions = 2;
   double ansp = partitionedTwoNorm(const_x, 2);
   double ansr = recursiveTwoNorm(const_x, 2);
-  ASSERT_EQ(1, 1);
 }
 
 TEST_F(CSCMatrixTest, MatvecWriteTest) {
   B->matvec(*x, *y);
-  Vector c = A->matvec(*x);
 
   std::stringstream buffer;
   std::streambuf *old = std::cout.rdbuf(buffer.rdbuf());
-  writeVector(*y, std::cout);
+  writeVector(*y, buffer);
   std::string stext = buffer.str();
+  std::cout.rdbuf(old);
 
-  writeVector(c, "exe/test_write_y.txt");
+  writeVector(*y, "exe/test_write_y.txt");
   std::ifstream f {"exe/test_write_y.txt"};
   std::string ftext {(std::istreambuf_iterator<char>(f)),
                       std::istreambuf_iterator<char>()};
 
   ASSERT_STREQ(stext.c_str(), ftext.c_str());
-  ASSERT_EQ(1, 1);
 }
 
 } // namespace

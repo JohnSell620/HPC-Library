@@ -34,22 +34,18 @@ int main() {
 		"Routine Clock CPUID Loop-ops Scalar "
 		"2-wide 4-wide 4-wide-fma Achieved" << std::endl;
 
-	std::cout << "hoisted " << clockspeed << " AVX2 12 " 	<< rate_h12
-						<< " " 				<< 2*rate_h12 << " " 					<< 4*rate_h12
-						<< " " 				<< 8*rate_h12 << " " 					<< achieved_h
-						<< std::endl;
-	std::cout << "hoisted " << clockspeed << " AVX2 20 " 	<< rate_h20
-						<< " " 				<< 2*rate_h20 << " " 					<< 4*rate_h20
-						<< " " 				<< 8*rate_h20 << " " 					<< achieved_h
-						<< std::endl;
-	std::cout << "copyblockhoisted " << clockspeed 	 << " AVX2 12 " << rate_cbh12
-						<< " " 								 << 2*rate_cbh12 << " " 				<< 4*rate_cbh12
-						<< " " 								 << 8*rate_cbh12 << " " 				<< achieved_cbh
-						<< std::endl;
-	std::cout << "copyblockhoisted " << clockspeed   << " AVX2 20 "  << rate_cbh20
-						<< " " 								 << 2*rate_cbh20 << " " 				 << 4*rate_cbh20
-						<< " " 								 << 8*rate_cbh20 << " " 				 << achieved_cbh
-						<< std::endl;
+	std::cout << "square multiply " << clockspeed 	<< " AVX2 12 " 	<< rate_h12   << " "
+			  << 2*rate_h12 		<< " "		  	<< 4*rate_h12 	<< " "		  << 8*rate_h12
+			  << " "				<< achieved_h 	<< std::endl;
+	std::cout << "square multiply " << clockspeed 	<< " AVX2 20 " 	<< rate_h20   << " "
+			  << 2*rate_h20 		<< " "		  	<< 4*rate_h20 	<< " "		  << 8*rate_h20
+			  << " "				<< achieved_h 	<< std::endl;
+	std::cout << "Strass. multiply "<< clockspeed 	<< " AVX2 12 " 	<< rate_cbh12 << " "
+			  <<2*rate_cbh12 		<< " "		  	<< 4*rate_cbh12	<< " "		  << 8*rate_cbh12
+			  << " "				<< achieved_cbh << std::endl;
+	std::cout << "Strass. multiply "<< clockspeed 	<< " AVX2 20 " 	<< rate_cbh20 << " "
+			  <<2*rate_cbh20 		<< " "		  	<< 4*rate_cbh20	<< " "		  << 8*rate_cbh20
+			  << " "				<< achieved_cbh << std::endl;
 
 	return 0;
 

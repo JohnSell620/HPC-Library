@@ -3,21 +3,42 @@
 # 06/07/2017
 # Makefile for HPC-Library.
 #
-LANG		= -std=c++17 # -Wc++11-extensions
+$(info *** Pass in MPIC=1 and/or CUDA=1 on machines with MPI and/or GPU enabled. ***)
 
-CXX		= c++
+# Compilers
 GPU		= nvcc
-MPI 		= mpic++ # -cxx=clang++ # --enable-mpi-cxx
+MPI 		= mpic++
 
-OPTS		= -Ofast -march=native -DNDEBUG -D_THREADING -pthread
-CPPFLAGS	+= -MD -MP
-PICKY		= -g -Wall # -Wextra -pedantic
+# g++ (default) compiler version
+CVER		= -std=c++17
 
-CXXFLAGS	= $(LANG)$(OPTS)
+# Debug options
+DEBUG		= 0
+DEBUGPICKY	= 0
+ifeq ($(DEBUGPICKY),1)
+	DEBUG=1
+endif
+
+# Set compiler flags
+CXXFLAGS	= $(CVER)
+ifeq ($(DEBUG),1)
+	CXXFLAGS += -g3
+	ifeq ($(DEBUGPICKY),1)
+		CXXFLAGS += -Wall -Wextra -pedantic
+		ifeq ($(CVER),-std=c++11)
+			CXXFLAGS += -Wc++11-extensions
+		endif
+	endif
+else
+	CXXFLAGS += -Ofast -march=native -DNDEBUG
+endif
+
+CXXFLAGS	+= -D_THREADING -pthread
 UGTFLAGS	= -lgtest -lgtest_main -lpthread
 GPUFLAGS	= -std=c++11
-MPIFLAGS	= $(LANG)$(OPTS) # $(PICKY)
+MPIFLAGS	= $(CVER) $(CXXFLAGS)# -cxx=clang++ # --enable-mpi-cxx
 
+# Source directories
 INC_PATH	= inc
 LIB_PATH	= lib
 OBJ_PATH	= obj
@@ -27,81 +48,86 @@ EXE_PATH	= exe
 GCH_PATH	= gch
 UGT_PATH 	= tests/unittests
 
-INCLUDES	= -I $(INC_PATH)
-
+# Specify directories to search
 VPATH 		:= src tests obj inc
-HEADERS		= $(wildcard inc/*.hpp)
-TESTS		= $(shell find tests/ ! -name "mpi*.cpp" -name "*.cpp" ! -name "*unittests.cpp")
-MPI_TESTS 	= $(wildcard tests/mpi/*.cpp)
-GPU_TESTS	= $(wildcard tests/gpu/*.cu)
-UNIT_TESTS	= $(wildcard tests/unittests/*.cpp)
-SOURCES		= $(wildcard src/*.cpp)
 
-# $(info $$TESTS is [${TESTS}])
+# Object file targets
+CLASS_TARGETS = $(filter-out Laplacian.o, $(patsubst %.cpp, %.o, $(notdir $(wildcard src/*.cpp))))
+CPU_TARGETS	= $(patsubst %.cpp, %.o, $(notdir $(shell find tests/ ! -name "mpi*.cpp" -name "*.cpp" ! -name "*unittests.cpp")))
+MPI_TARGETS	= $(patsubst %.cpp, %.o, $(notdir $(wildcard tests/mpi/*.cpp)))
+GPU_TARGETS	= $(patsubst %.cu, %.o, $(notdir $(wildcard tests/gpu/*.cu)))
+UTEST_TARGETS 	= $(patsubst %.cpp, %.o, $(notdir $(wildcard tests/unittests/*.cpp)))
 
-CLASSES		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(SOURCES)))
-BENCH 		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(TESTS)))
-MPI_BENCH 	= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(MPI_TESTS)))
-GPU_BENCH	= $(patsubst %.cu, $(OBJ_PATH)/%.o, $(notdir $(GPU_TESTS)))
-GTEST		= $(patsubst %.cpp, $(OBJ_PATH)/%.o, $(notdir $(UNIT_TESTS)))
-
-OBJECTS		= $(CLASSES) $(BENCH) $(MPI_BENCH) $(GPU_BENCH) $(GTEST)
-TARGETS		= $(notdir $(BENCH))
-MPI_TARGETS	= $(notdir $(MPI_BENCH))
-GPU_TARGETS	= $(notdir $(GPU_BENCH))
-GTEST_TARGETS 	= $(notdir $(GTEST))
+# Specify executable targets
+CPU_EXECS	= $(notdir $(CPU_TARGETS:.o=))
+MPI_EXECS	= $(notdir $(MPI_TARGETS:.o=))
+GPU_EXECS	= $(notdir $(GPU_TARGETS:.o=))
+UTEST_EXECS	= $(notdir $(UTEST_TARGETS:.o=))
 PCHS		= $(notdir $(HEADERS:=.gch))
 
-EXECS		= $(TARGETS:.o=)
-MPI_EXECS	= $(MPI_TARGETS:.o=)
-GPU_EXECS	= $(GPU_TARGETS:.o=)
-GTEST_EXECS	= $(GTEST_TARGETS:.o=)
+OBJECTS		= $(CPU_TARGETS) $(UTEST_TARGETS)
+EXECUTABLES = $(CPU_EXECS) $(UTEST_EXECS)
 
-all		 : $(OBJECTS) $(EXECS) $(MPI_EXECS) $(GPU_EXECS) $(GTEST_EXECS)
+# If MPI is enabled on machine
+MPIC		= 0
+ifeq ($(MPIC),1)
+	CLASS_TARGETS += Laplacian.o
+	OBJECTS		+= $(CLASS_TARGETS) $(MPI_TARGETS)
+	EXECUTABLES	 += $(MPI_EXECS)
+else
+	OBJECTS		+= $(filter-out Laplacian.o, $(CLASS_TARGETS))
+endif
 
-classes 	 : $(CLASSES)
+# If CUDA is enabled on machine
+CUDA		= 0
+ifeq ($(CUDA),1)
+	OBJECTS		+= $(GPU_TARGETS)
+	EXECUTABLES	+= $(GPU_EXECS)
+endif
 
-precomp_headers : $(PCHS)
+.PHONY: all, clean
+all		 : $(EXECUTABLES)
+classes : $(CLASS_TARGETS)
+precompiles_headers : $(PCHS)
+objects	 : $(OBJECTS)
+clean 	 :
+	/bin/rm -f obj/* exe/* gch/*
 
-obj		 : $(OBJECTS)
-
-exe		 : $(EXECS)
-
-$(EXECS)	 :
-		  $(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
+# Executable rules
+$(CPU_EXECS)	 :
+		  $(CXX) $(CXXFLAGS) -I$(INC_PATH) $^ -o $(EXE_PATH)/$@
 
 $(MPI_EXECS)	 :
-		  $(MPI) $(MPIFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
+		  $(MPI) $(MPIFLAGS) -I$(INC_PATH) $^ -o $(EXE_PATH)/$@
 
 $(GPU_EXECS)	 :
-		  $(GPU) $(GPUFLAGS) $(INCLUDES) $^ -o $(EXE_PATH)/$@
+		  $(GPU) $(GPUFLAGS) -I$(INC_PATH) $^ -o $(EXE_PATH)/$@
 
-$(GTEST_EXECS)	 :
-		  $(CXX) $(LANG) $(OPTS) $(INCLUDES) $^ $(UGTFLAGS) -o $(EXE_PATH)/$@
+# Googletest related flags $(UGTFLAGS), -lgtest, -lgtest_main, -lpthread flags must be added last.
+$(UTEST_EXECS)	 :
+		  $(CXX) $(CXXFLAGS) -I$(INC_PATH) $^ $(UGTFLAGS) -o $(EXE_PATH)/$@
 
+# Object rules
 $(OBJ_PATH)/%.o : %.cpp
-		  $(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+		  $(CXX) -c $(CXXFLAGS) -I$(INC_PATH) $< -o $@
 
 $(OBJ_PATH)/Laplacian.o : Laplacian.cpp
-		  $(MPI) -c $(MPIFLAGS) $(INCLUDES) $< -o $@
+		  $(MPI) -c $(MPIFLAGS) -I$(INC_PATH) $< -o $@
 
 $(OBJ_PATH)/%.o : $(MPI_PATH)/%.cpp
-		  $(MPI) -c $(MPIFLAGS) $(INCLUDES) $< -o $@
+		  $(MPI) -c $(MPIFLAGS) -I$(INC_PATH) $< -o $@
 
 $(OBJ_PATH)/%.o : $(GPU_PATH)/%.cu
-		  $(GPU) -c $(GPUFLAGS) $(INCLUDES) $< -o $@
+		  $(GPU) -c $(GPUFLAGS) -I$(INC_PATH) $< -o $@
 
 $(OBJ_PATH)/%.o : $(UGT_PATH)/%.cpp
-		  $(CXX) -c $(LANG) $(OPTS) $(UGTFLAGS) $(INCLUDES) $< -o $@
+		  $(CXX) -c $(CXXFLAGS) $(UGTFLAGS) -I$(INC_PATH) $< -o $@
 
+# Precompiled headers
 %.hpp.gch	: %.hpp
 		  $(CXX) $(LANG) -x c++-header $< -o $(GCH_PATH)/$@
 
-.PHONY:	clean
-
-clean:
-	/bin/rm -f obj/* exe/* gch/*
-
+# Executable targets
 bench			: bench.o AOS.o COO.o CSC.o Vector.o
 csrbench		: csrbench.o CSR.o Vector.o
 densebench		: densebench.o Matrix.o Vector.o
@@ -115,6 +141,7 @@ mpi_hello_world		: mpi_hello_world.o
 gpu_densebench		: gpu_densebench.o Matrix.o Vector.o
 unittests		: unittests.o CSC.o Matrix.o Vector.o
 
+# Object targets
 obj/bench.o		: bench.cpp AOS.hpp CSC.hpp COO.hpp Vector.hpp
 obj/csrbench.o		: csrbench.cpp CSR.hpp Vector.hpp
 obj/densebench.o	: densebench.cpp Matrix.hpp Vector.hpp
