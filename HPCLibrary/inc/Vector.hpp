@@ -1,9 +1,9 @@
 /*
- * Vector.hpp
- * Description: Vector class.
- * @author Johnny Sellers
- * @version 0.1 05/10/2017
- */
+* Vector.hpp
+* Description: Vector class.
+* @author Johnny Sellers
+* @version 0.1 05/10/2017
+*/
 #if !defined(VECTOR_HPP)
 #define VECTOR_HPP
 
@@ -17,27 +17,25 @@ std::string getenv_to_string(const char *in);
 std::string getenv(const std::string& in);
 
 class Vector {
-  typedef std::vector<double>::size_type size_type;
+    typedef std::vector<double>::size_type size_type;
 
 public:
-  explicit Vector(size_type M) : iRows(M), arrayData(iRows) {}
-  explicit Vector(size_type M, double init) : iRows(M), arrayData(iRows, init) {}
+    explicit Vector(size_type M) : iRows(M), arrayData(iRows) {}
+    explicit Vector(size_type M, double init) : iRows(M), arrayData(iRows, init) {}
 
-  ~Vector() {}
+    ~Vector() {}
 
-  double &operator()(size_type i) { return arrayData[i]; }
-  const double &operator()(size_type i) const { return arrayData[i]; }
+    double &operator()(size_type i) { return arrayData[i]; }
+    const double &operator()(size_type i) const { return arrayData[i]; }
 
-  size_type numRows() const { return arrayData.size(); }
+    size_type numRows() const { return arrayData.size(); }
 
-  // Used in readVector()
-  void setValue(int k, double value) {
-		arrayData[k] = value;
-	}
+    // Used in readVector()
+    void setValue(int k, double value) { arrayData[k] = value; }
 
 private:
-  size_type iRows;
-  std::vector<double> arrayData;
+    size_type iRows;
+    std::vector<double> arrayData;
 };
 
 Vector operator+(const Vector& x, const Vector& y);
